@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Deal Profit Calculator - Premium Edition</title>
+  <style>
+    :root{--navy:#0f2742;--gold:#caa35a;--cream:#f7f3ec;--ink:#1c2431;--line:#d8dee8;--card:#fff;--soft:#f4f7fb;--ok:#e8f8f0;--bad:#fff3f3}
+    body{font-family:Inter,Arial,sans-serif;background:var(--cream);color:var(--ink);margin:0}
+    .wrap{max-width:1000px;margin:18px auto;padding:0 14px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin:12px 0}
+    .hero{background:linear-gradient(135deg,var(--navy),#1f3f66);color:#fff;border:none}
+    .hero h1{margin:0 0 8px}
+    .nav a{display:inline-block;margin:4px 8px 0 0;padding:6px 10px;border-radius:999px;background:#eef2fa;color:#1f2b40;text-decoration:none;font-size:12px}
+    .ribbon{height:6px;background:linear-gradient(90deg,var(--gold),#e7c98f);border-radius:999px;margin:0 0 10px}
+    h2{margin:0 0 10px;font-size:20px;color:var(--navy)}
+    table{width:100%;border-collapse:collapse}
+    th,td{border:1px solid var(--line);padding:8px;font-size:13px}
+    th{background:#eef2fa;text-align:left}
+    input{width:100%;padding:6px;border:1px solid #c8d1e5;border-radius:6px}
+    .num{text-align:right}
+    .summary{background:var(--ok);border:1px solid #bfe9cf;padding:10px;border-radius:10px}
+    .warn{background:var(--bad);border:1px solid #f2c1c1;padding:10px;border-radius:10px}
+    .small{font-size:12px;color:#59657a}
+    .copy{background:#fff8ea;border:1px solid #e9d4a5;border-radius:10px;padding:10px}
+    .copy pre{white-space:pre-wrap;margin:0;font-family:Consolas,Monaco,monospace;font-size:12px;line-height:1.4}
+    @media print{.nav{display:none}}
+  </style>
+  <!-- MemberSpace install snippet goes here -->
+</head>
+<body>
+<div class="wrap">
+  <div class="card hero">
+    <h1>Flip Deal Profit Calculator</h1>
+    <p>Premium workbook style • editable defaults • instant deal grade</p>
+  </div>
+
+  <div class="card nav">
+    <a href="./Beginner_Flipping_Playbook.html">Open Manual</a>
+    <a href="./Printable_Worksheet_Pack.html">Open Worksheet Pack</a>
+    <a href="./Package_Hub.html">Open Master Hub</a>
+  </div>
+
+  <div class="card"><div class="ribbon"></div>
+    <h2>1) Core Deal Inputs</h2>
+    <table>
+      <tr><th>Input</th><th>Value</th></tr>
+      <tr><td>Asking Price</td><td><input id="ask" type="number" value="205000"></td></tr>
+      <tr><td>Your Current Offer / Purchase Price</td><td><input id="purchase" type="number" value="200000"></td></tr>
+      <tr><td>ARV (After Repair Value)</td><td><input id="arv" type="number" value="320000"></td></tr>
+      <tr><td>Rehab Budget</td><td><input id="rehab" type="number" value="45000"></td></tr>
+      <tr><td>Hold Period (months)</td><td><input id="holdMonths" type="number" value="6"></td></tr>
+      <tr><td>Loan-to-Cost % (LTC)</td><td><input id="ltc" type="number" value="90"></td></tr>
+    </table>
+  </div>
+
+  <div class="card"><div class="ribbon"></div>
+    <h2>2) Hard Money + Acquisition Costs</h2>
+    <table>
+      <tr><th>Cost Item</th><th>Default</th><th>Auto $</th></tr>
+      <tr><td>Lender Points (% of loan)</td><td><input id="pointsPct" type="number" value="2"></td><td class="num" id="pointsAmt"></td></tr>
+      <tr><td>Interest Rate (annual %)</td><td><input id="ratePct" type="number" value="11"></td><td class="num" id="interestAmt"></td></tr>
+      <tr><td>Underwriting/Admin fee</td><td><input id="uwFee" type="number" value="1495"></td><td class="num" id="uwFeeAmt"></td></tr>
+      <tr><td>Appraisal</td><td><input id="appraisal" type="number" value="750"></td><td class="num" id="appraisalAmt"></td></tr>
+      <tr><td>Inspection/Draw fees total</td><td><input id="drawFees" type="number" value="900"></td><td class="num" id="drawFeesAmt"></td></tr>
+      <tr><td>Lender docs/wire/misc fees</td><td><input id="lenderMisc" type="number" value="500"></td><td class="num" id="lenderMiscAmt"></td></tr>
+      <tr><td>Title + escrow (buy side)</td><td><input id="titleBuy" type="number" value="2200"></td><td class="num" id="titleBuyAmt"></td></tr>
+      <tr><td>Recording + transfer + filing</td><td><input id="recording" type="number" value="450"></td><td class="num" id="recordingAmt"></td></tr>
+      <tr><td>Survey (if needed)</td><td><input id="survey" type="number" value="550"></td><td class="num" id="surveyAmt"></td></tr>
+    </table>
+  </div>
+
+  <div class="card"><div class="ribbon"></div>
+    <h2>3) Holding Costs (Monthly)</h2>
+    <table>
+      <tr><th>Cost Item</th><th>Monthly</th><th>Total Hold $</th></tr>
+      <tr><td>Property Taxes</td><td><input id="taxMo" type="number" value="450"></td><td class="num" id="taxTot"></td></tr>
+      <tr><td>Insurance (vacant/builders risk)</td><td><input id="insMo" type="number" value="250"></td><td class="num" id="insTot"></td></tr>
+      <tr><td>Utilities</td><td><input id="utilMo" type="number" value="300"></td><td class="num" id="utilTot"></td></tr>
+      <tr><td>HOA</td><td><input id="hoaMo" type="number" value="0"></td><td class="num" id="hoaTot"></td></tr>
+      <tr><td>Lawn/Pest/Maintenance</td><td><input id="maintMo" type="number" value="150"></td><td class="num" id="maintTot"></td></tr>
+    </table>
+  </div>
+
+  <div class="card"><div class="ribbon"></div>
+    <h2>4) Selling Costs</h2>
+    <table>
+      <tr><th>Cost Item</th><th>Default</th><th>Auto $</th></tr>
+      <tr><td>Agent Commissions (% of sale)</td><td><input id="agentPct" type="number" value="6"></td><td class="num" id="agentAmt"></td></tr>
+      <tr><td>Seller Closing Costs (% of sale)</td><td><input id="sellClosePct" type="number" value="1.5"></td><td class="num" id="sellCloseAmt"></td></tr>
+      <tr><td>Buyer Concessions (% of sale)</td><td><input id="concPct" type="number" value="0"></td><td class="num" id="concAmt"></td></tr>
+      <tr><td>Staging/Photos/Marketing</td><td><input id="marketing" type="number" value="1800"></td><td class="num" id="marketingAmt"></td></tr>
+    </table>
+  </div>
+
+  <div class="card"><div class="ribbon"></div>
+    <h2>5) Contingency + Summary</h2>
+    <table>
+      <tr><th>Item</th><th>Value</th></tr>
+      <tr><td>Contingency % on rehab</td><td><input id="contPct" type="number" value="15"></td></tr>
+      <tr><td>Loan Amount (auto from LTC)</td><td class="num" id="loanAmt"></td></tr>
+      <tr><td>Total Acquisition + Loan Costs</td><td class="num" id="acqTotal"></td></tr>
+      <tr><td>Total Holding Costs</td><td class="num" id="holdTotal"></td></tr>
+      <tr><td>Total Selling Costs</td><td class="num" id="sellTotal"></td></tr>
+      <tr><td>Contingency Amount</td><td class="num" id="contAmt"></td></tr>
+      <tr><td><strong>Total Project Costs</strong></td><td class="num" id="totalCosts"></td></tr>
+      <tr><td><strong>Projected Net Profit</strong></td><td class="num" id="profit"></td></tr>
+      <tr><td><strong>Profit as % of ARV</strong></td><td class="num" id="profitPct"></td></tr>
+    </table>
+    <div class="summary" id="grade"></div>
+    <div class="warn small">Defaults are typical ranges, not quotes. Replace with real lender/title/insurance numbers for every deal.</div>
+  </div>
+
+  <div class="card"><div class="ribbon"></div>
+    <h2>6) Auto Offer Ladder (for Worksheet 5)</h2>
+    <p class="small">These are max offer ceilings based on profit goals. If ask is lower than a ceiling, use ask or negotiate lower.</p>
+    <table>
+      <tr><th>Offer Type</th><th>Profit Goal</th><th>Max Offer</th><th>Projected Net Profit at Max Offer</th></tr>
+      <tr><td>Target</td><td>$40,000</td><td class="num" id="targetOffer"></td><td class="num" id="targetProfit"></td></tr>
+      <tr><td>Stretch</td><td>$30,000</td><td class="num" id="stretchOffer"></td><td class="num" id="stretchProfit"></td></tr>
+      <tr><td>Walk-Away</td><td>$25,000</td><td class="num" id="walkOffer"></td><td class="num" id="walkProfit"></td></tr>
+    </table>
+  </div>
+
+  <div class="card"><div class="ribbon"></div>
+    <h2>7) Auto Exit Number (for Worksheet 7)</h2>
+    <table>
+      <tr><th>Item</th><th>Value</th></tr>
+      <tr><td>Wholesale Floor Net (minimum net profit target)</td><td class="num" id="whFloor"></td></tr>
+      <tr><td>Wholesale Exit Sale Price Needed (to hit floor net)</td><td class="num" id="whSaleNeeded"></td></tr>
+    </table>
+    <p class="small">Wholesale Floor Net is auto-set to the higher of $10,000 or 3% of ARV.</p>
+  </div>
+
+  <div class="card copy"><div class="ribbon"></div>
+    <h2>8) Copy to Worksheet 5 + 7</h2>
+    <pre id="worksheetCopy"></pre>
+  </div>
+</div>
+
+<script>
+function fmt(n){return '$'+Number(n).toLocaleString(undefined,{maximumFractionDigits:0})}
+function val(id){return Number(document.getElementById(id).value||0)}
+function set(id,v){document.getElementById(id).textContent=v}
+function calc(){
+  const ask=val('ask'), purchase=val('purchase'), arv=val('arv'), rehab=val('rehab'), hold=val('holdMonths');
+  const ltc=val('ltc')/100;
+  const pointsPct=val('pointsPct')/100;
+  const rateFactor=(val('ratePct')/100)*(hold/12);
+
+  const loan=purchase*ltc;
+  const points=loan*pointsPct;
+  const interest=loan*rateFactor;
+  const fixedAcq=val('uwFee')+val('appraisal')+val('drawFees')+val('lenderMisc')+val('titleBuy')+val('recording')+val('survey');
+  const acq=points+interest+fixedAcq;
+
+  const holdTot=hold*(val('taxMo')+val('insMo')+val('utilMo')+val('hoaMo')+val('maintMo'));
+  const agent=arv*(val('agentPct')/100), sellClose=arv*(val('sellClosePct')/100), conc=arv*(val('concPct')/100);
+  const sellTot=agent+sellClose+conc+val('marketing');
+  const cont=rehab*(val('contPct')/100);
+
+  const total=purchase+rehab+acq+holdTot+sellTot+cont;
+  const profit=arv-total; const profitPct=arv?(profit/arv*100):0;
+
+  // Offer ladder math: solve max offer at a target profit
+  const offerMultiplier = 1 + ltc*(pointsPct + rateFactor);
+  const fixedNoOffer = rehab + fixedAcq + holdTot + sellTot + cont;
+  const maxOfferFor = (profitGoal)=> (arv - fixedNoOffer - profitGoal) / (offerMultiplier||1);
+  const projProfitAtOffer = (offer)=> arv - (offer*offerMultiplier + fixedNoOffer);
+
+  const targetOffer=maxOfferFor(40000);
+  const stretchOffer=maxOfferFor(30000);
+  const walkOffer=maxOfferFor(25000);
+
+  // Wholesale floor net + needed sale price
+  const whFloor=Math.max(10000, arv*0.03);
+  const whSaleNeeded=total+whFloor;
+
+  set('loanAmt',fmt(loan)); set('pointsAmt',fmt(points)); set('interestAmt',fmt(interest));
+  ['uwFee','appraisal','drawFees','lenderMisc','titleBuy','recording','survey','marketing'].forEach(id=>set(id+'Amt',fmt(val(id))));
+  set('taxTot',fmt(hold*val('taxMo'))); set('insTot',fmt(hold*val('insMo'))); set('utilTot',fmt(hold*val('utilMo'))); set('hoaTot',fmt(hold*val('hoaMo'))); set('maintTot',fmt(hold*val('maintMo')));
+  set('agentAmt',fmt(agent)); set('sellCloseAmt',fmt(sellClose)); set('concAmt',fmt(conc));
+  set('acqTotal',fmt(acq)); set('holdTotal',fmt(holdTot)); set('sellTotal',fmt(sellTot)); set('contAmt',fmt(cont)); set('totalCosts',fmt(total)); set('profit',fmt(profit)); set('profitPct',profitPct.toFixed(1)+'%');
+
+  set('targetOffer',fmt(Math.max(0,targetOffer))+(ask?` (Ask: ${fmt(ask)})`:''));
+  set('stretchOffer',fmt(Math.max(0,stretchOffer))+(ask?` (Ask: ${fmt(ask)})`:''));
+  set('walkOffer',fmt(Math.max(0,walkOffer))+(ask?` (Ask: ${fmt(ask)})`:''));
+  set('targetProfit',fmt(projProfitAtOffer(Math.max(0,targetOffer))));
+  set('stretchProfit',fmt(projProfitAtOffer(Math.max(0,stretchOffer))));
+  set('walkProfit',fmt(projProfitAtOffer(Math.max(0,walkOffer))));
+
+  set('whFloor',fmt(whFloor));
+  set('whSaleNeeded',fmt(whSaleNeeded));
+
+  const copyText =
+`WORKSHEET 5 (Offer Ladder)
+Property Address: ______________________________
+ARV: ${fmt(arv)}
+Rehab: ${fmt(rehab)}
+Total Other Costs: ${fmt(total - purchase - rehab)}
+
+Target Offer: ${fmt(Math.max(0,targetOffer))}
+Projected Net Profit @ Target: ${fmt(projProfitAtOffer(Math.max(0,targetOffer)))}
+
+Stretch Offer: ${fmt(Math.max(0,stretchOffer))}
+Projected Net Profit @ Stretch: ${fmt(projProfitAtOffer(Math.max(0,stretchOffer)))}
+
+Walk-Away Offer: ${fmt(Math.max(0,walkOffer))}
+Projected Net Profit @ Walk-Away: ${fmt(projProfitAtOffer(Math.max(0,walkOffer)))}
+
+-----------------------------------------------
+WORKSHEET 7 (Exit)
+Initial List Price: ${fmt(arv)}
+Target DOM: 14 days
+Wholesale Floor Net: ${fmt(whFloor)}
+Wholesale Exit Sale Price Needed: ${fmt(whSaleNeeded)}
+Hard Rule: If no acceptable contract by day 30, execute backup within 72 hours.`;
+  document.getElementById('worksheetCopy').textContent = copyText;
+
+  let grade='PASS'; if(profit>=40000) grade='Tier A: Actionable now'; else if(profit>=25000) grade='Tier B: Negotiate aggressively';
+  document.getElementById('grade').textContent='Deal Grade: '+grade;
+}
+document.querySelectorAll('input').forEach(i=>i.addEventListener('input',calc)); calc();
+</script>
+</body>
+</html>

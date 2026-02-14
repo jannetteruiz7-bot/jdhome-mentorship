@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Investor Worksheet Pack - Premium Edition</title>
+  <style>
+    :root{
+      --navy:#0f2742;
+      --gold:#caa35a;
+      --cream:#f7f3ec;
+      --ink:#1c2431;
+      --muted:#5f6c7b;
+      --line:#d8dee8;
+      --card:#ffffff;
+      --soft:#f4f7fb;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--cream);color:var(--ink);font-family:"Segoe UI",Arial,sans-serif;line-height:1.45}
+    .wrap{max-width:920px;margin:20px auto;padding:0 14px}
+    .sheet{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;margin:16px 0;box-shadow:0 6px 20px rgba(10,20,40,.06);break-inside:avoid}
+    .cover{background:linear-gradient(135deg,var(--navy),#1f3f66);color:#fff;border:none}
+    .kicker{display:inline-block;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);padding:6px 10px;border-radius:999px;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+    h1{font-family:Georgia,"Times New Roman",serif;font-size:34px;letter-spacing:.2px;margin:10px 0 8px}
+    h2{font-family:Georgia,"Times New Roman",serif;font-size:25px;margin:0 0 8px;color:var(--navy)}
+    h3{font-size:15px;margin:12px 0 8px;text-transform:uppercase;letter-spacing:.04em;color:#273447}
+    p{margin:6px 0}
+    .small{font-size:12px;color:var(--muted)}
+    .ribbon{height:6px;background:linear-gradient(90deg,var(--gold),#e7c98f);border-radius:999px;margin:0 0 14px}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .box{border:1px solid var(--line);background:var(--soft);border-radius:10px;padding:10px}
+    .line{border-bottom:1px solid #bcc6d5;height:24px}
+    .line.tall{height:34px}
+    .line.xl{height:44px}
+    .guide{border-left:4px solid var(--gold);background:#fff8ea;padding:10px 12px;border-radius:8px;margin:10px 0;font-size:12px;color:#38465a}
+    .check{padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fafcff}
+    .check ul{margin:0;padding:0;list-style:none}
+    .check li{margin:6px 0}
+    .check li::before{content:"☐ ";font-weight:700;color:#1c2f4a}
+    table{width:100%;border-collapse:collapse;margin-top:8px}
+    th,td{border:1px solid #cfd7e4;padding:8px;text-align:left;vertical-align:top;font-size:13px}
+    table.roomy td{height:34px}
+    table.super-roomy td{height:52px}
+    th{background:#edf2fa;color:#1f2f49}
+    .formula{border:1px solid #d7c49b;background:#fff9ec;border-radius:8px;padding:10px;font-weight:700}
+    .num{font-family:Consolas,Monaco,monospace}
+    .page-note{margin-top:8px;color:#637084;font-size:12px}
+    @media (max-width:760px){.grid2{grid-template-columns:1fr}}
+    @page{size:Letter portrait;margin:0.4in}
+    @media print{
+      body{background:#fff;color:#000;font-size:11px;line-height:1.3}
+      .wrap{max-width:none;margin:0;padding:0}
+      .sheet{
+        box-shadow:none;
+        border:1px solid #cfd7e4;
+        border-radius:0;
+        margin:0;
+        padding:12px;
+        page-break-inside:avoid;
+        break-inside:avoid;
+      }
+      h1{font-size:24px;margin:6px 0}
+      h2{font-size:19px;margin:0 0 6px}
+      h3{font-size:12px;margin:8px 0 6px}
+      p{margin:4px 0}
+      .ribbon{height:4px;margin:0 0 8px}
+      .grid2{gap:8px}
+      .box,.check{padding:8px}
+      th,td{padding:5px;font-size:11px}
+      .line{height:18px}
+      .page-note{font-size:10px}
+    }
+  </style>
+  <!-- MemberSpace install snippet goes here -->
+</head>
+<body>
+<div class="wrap">
+
+  <section class="sheet cover">
+    <span class="kicker">Premium Investor Toolkit</span>
+    <h1>House Flipping Worksheet Pack</h1>
+    <p>Action-first workbook for serious deal execution.</p>
+    <p class="small" style="color:#d8e2f0">Use one full packet per deal. Keep completed packets in a deal folder by property address.</p>
+  </section>
+
+  <section class="sheet">
+    <div class="ribbon"></div>
+    <h2>Worksheet 1 — Find the House (Initial Deal Screen)</h2>
+    <p><strong>Goal:</strong> Quick first-pass screen every time you think you found a house.</p>
+
+    <div class="grid2">
+      <div class="box">
+        <h3>Find the House</h3>
+        <p><strong>Property Address:</strong> ____________________________________________</p>
+        <p>City/Metro: __________________________</p>
+        <p>ZIP: __________________________</p>
+        <p>Property Type: SFR / Duplex / Townhome / Other</p>
+        <p>Beds/Baths: ______ / ______</p>
+        <p>Sqft: __________________________</p>
+        <p>Year Built: __________________________</p>
+        <div class="guide"><strong>What the market usually wants:</strong><br>
+          • Highest demand: 3/2 and 4/2 layouts, functional kitchens, updated primary bath, open living areas.<br>
+          • Typical flip sweet spot: 1,200-2,400 sqft in neighborhoods with strong school/commuter demand.<br>
+          • Avoid odd layouts, severe external obsolescence, and homes with no nearby comp support.
+        </div>
+      </div>
+      <div class="box">
+        <h3>Deal Rules (Use These Defaults)</h3>
+        <p><strong>Minimum Net Profit:</strong> <span class="num">$30,000 minimum</span> (better target: $40,000+).</p>
+        <p><strong>Minimum ARV Margin:</strong> <span class="num">12% minimum</span> net margin.</p>
+        <p class="small">ARV margin means: (Net Profit ÷ ARV). Example: $36k profit on $300k ARV = 12% margin.</p>
+        <p><strong>Max Hold Time Target:</strong> <span class="num">90 days total</span> (buy + rehab + sale).</p>
+        <p><strong>Complexity for this property (circle one):</strong> Light / Medium / Heavy</p>
+        <p><strong>Max DOM at acquisition:</strong> ______ days</p>
+        <p><strong>Maximum Rehab Budget:</strong> <span class="num">$________</span></p>
+      </div>
+    </div>
+
+    <h3>Hard Pass Conditions (be strict)</h3>
+    <div class="check"><ul>
+      <li>Projected net profit is below your minimum threshold after all costs.</li>
+      <li>Foundation movement or structural issues without enough discount.</li>
+      <li>Flood-zone insurance/mitigation costs make the deal unworkable.</li>
+      <li>ARV relies on outlier comps instead of solid nearby sold data.</li>
+      <li>Estimated rehab + holding costs push projected net below minimum target.</li>
+      <li>Layout/location issues likely to cause long DOM after rehab.</li>
+    </ul></div>
+
+    <h3>Houston Target ZIPs (objective investment criteria)</h3>
+    <p class="small">Use objective filters only: school demand, DOM velocity, rent-to-price ratio, low crime trend, and renovation resale activity.</p>
+    <p><strong>Common investor-watch areas:</strong> 77007, 77008, 77019, 77024, 77025, 77027, 77030, 77055, 77056, 77057, 77063, 77079, 77094, 77339, 77345, 77346, 77375, 77379, 77401, 77406, 77407, 77429, 77433, 77441, 77449, 77450, 77459, 77479, 77493, 77494.</p>
+    <p class="small">Always verify current comp depth and DOM by micro-neighborhood before offering.</p>
+
+    <p class="page-note">Rule: If it misses your Buy Box, pass immediately.</p>
+  </section>
+
+  <section class="sheet">
+    <div class="ribbon"></div>
+    <h2>Worksheet 2 — ARV Comp Sheet</h2>
+    <p><strong>Goal:</strong> Build a conservative ARV using sold data only.</p>
+    <p>Subject Property Address: ________________________________________________</p>
+
+    <div class="guide"><strong>ARV comp rules:</strong> Use sold comps within ~0.5-1.0 miles when possible, sold in last 3-6 months, similar sqft/age/style/condition. Avoid pending-only ARV. If only weak comps exist, lower ARV.</div>
+    <table class="roomy">
+      <tr><th>Comp Address</th><th>Sold Price</th><th>Sqft</th><th>Beds/Baths</th><th>Sold Date</th><th>Days on Market</th><th>$/Sqft</th><th>Distance</th><th>Adjustments + Notes</th></tr>
+      <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    </table>
+
+    <div class="formula">Conservative ARV = Median Adjusted Value = <span class="num">$________________</span></div>
+    <p class="page-note">Rule: Never anchor to the highest comp. If comp spread is wide, underwrite to the lower-middle range.</p>
+  </section>
+
+  <section class="sheet">
+    <div class="ribbon"></div>
+    <h2>Worksheet 3 — Rehab Scope + Budget</h2>
+    <p><strong>Goal:</strong> Remove guesswork from renovation costs.</p>
+    <div class="guide"><strong>Budget guidance:</strong> Get at least 2 contractor quotes on major line items. Newer flippers should carry a 12%-18% contingency (older homes or unknowns: 18%-25%).</div>
+    <table>
+      <tr><th>Category</th><th>Scope Detail (specific)</th><th>Initial Estimate</th><th>Contractor Quote 1</th><th>Contractor Quote 2</th><th>Final Budget</th></tr>
+      <tr><td>Roof</td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>HVAC</td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Electrical</td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Plumbing</td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Kitchen</td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Bathrooms</td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Flooring/Paint</td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Exterior/Landscape</td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Permits/Trash/Misc</td><td></td><td></td><td></td><td></td><td></td></tr>
+    </table>
+
+    <p>Subtotal Rehab: <span class="num">$________</span> | Contingency %: ____ | Contingency Amount: <span class="num">$________</span></p>
+    <div class="formula">Total Rehab Budget = Subtotal + Contingency = <span class="num">$________________</span></div>
+  </section>
+
+  <section class="sheet">
+    <div class="ribbon"></div>
+    <h2>Worksheet 4 — Financing + Insurance Prep</h2>
+    <p><strong>Goal:</strong> Lock funding and coverage before you’re under pressure.</p>
+
+    <div class="guide"><strong>Financing checklist (critical):</strong><br>
+      • Ask if interest is charged on <strong>full approved loan</strong> or <strong>only disbursed draws</strong> (big cost difference).<br>
+      • Ask draw timing: weekly, biweekly, or milestone-only. Slow draws can stall subs and extend hold time.<br>
+      • Confirm inspection fee per draw, minimum interest months, and extension costs.<br>
+      • Prefer lenders with clear draw turnaround time (example: funds released in 48-72 hrs after inspection).
+    </div>
+
+    <h3>Lender Comparison (call at least 2)</h3>
+    <table class="roomy">
+      <tr><th>Lender</th><th>Rate</th><th>Points</th><th>LTC/LTV</th><th>Term</th><th>Draw Timing + Fees</th><th>Interest on Full or Drawn?</th><th>Extension Fee</th><th>Notes</th></tr>
+      <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    </table>
+
+    <h3>Insurance: What to Ask For (Practical)</h3>
+    <div class="check"><ul>
+      <li>Builder’s Risk (or Vacant Dwelling) policy for renovation period.</li>
+      <li>General Liability at least $1M per occurrence / $2M aggregate.</li>
+      <li>Dwelling/replacement coverage near full rebuild cost (ask agent for replacement-cost estimate).</li>
+      <li>If needed for lender: lender listed as mortgagee + additional insured requirements confirmed.</li>
+      <li>Add flood/wind/hail endorsements if property risk requires it (don’t assume included).</li>
+      <li>Coverage start date must be at/just before closing, not after contractor start.</li>
+    </ul></div>
+  </section>
+
+  <section class="sheet">
+    <div class="ribbon"></div>
+    <h2>Worksheet 5 — Offer Ladder Sheet</h2>
+    <p><strong>Goal:</strong> Submit disciplined offers with a hard ceiling.</p>
+    <div class="guide"><strong>Offer guidance:</strong> Use your calculator output to fill Target, Stretch, Walk-Away, and projected net profit at each. Do not manually "eyeball" these numbers.</div>
+    <p>Property: ______________________ ARV: <span class="num">$________</span></p>
+    <p>Rehab: <span class="num">$________</span> | Total Other Costs: <span class="num">$________</span></p>
+
+    <table>
+      <tr><th>Offer Type</th><th>Offer Price</th><th>Projected Net Profit</th><th>When to Use</th></tr>
+      <tr><td>Target</td><td><span class="num">$________</span></td><td><span class="num">$________</span></td><td>Best risk-adjusted scenario</td></tr>
+      <tr><td>Stretch</td><td><span class="num">$________</span></td><td><span class="num">$________</span></td><td>If seller counters and risk remains manageable</td></tr>
+      <tr><td>Walk-Away</td><td><span class="num">$________</span></td><td><span class="num">$________</span></td><td>Absolute max. Do not exceed.</td></tr>
+    </table>
+
+    <h3>Negotiation Notes (DOM, condition, comp spread)</h3>
+    <div class="line"></div><div class="line"></div><div class="line"></div>
+  </section>
+
+  <section class="sheet">
+    <div class="ribbon"></div>
+    <h2>Execution Phase (Fill these after you decide to move forward)</h2>
+    <p class="small">Worksheets 6-7 are for active deals under contract / in rehab / ready for exit.</p>
+  </section>
+
+  <section class="sheet">
+    <div class="ribbon"></div>
+    <h2>Worksheet 6 — Weekly Rehab Tracker</h2>
+    <p><strong>Goal:</strong> Control timeline and budget every week.</p>
+    <div class="guide"><strong>Timeline guidance:</strong> Light rehab often 3-6 weeks, medium 6-10 weeks, heavy 10-16+ weeks. If a phase slips 1 week, immediately adjust sequencing, labor, and materials plan to protect hold cost.</div>
+    <table class="super-roomy">
+      <tr><th>Week #</th><th>Planned Scope (detailed)</th><th>Completed Scope + Notes</th><th>Planned Spend</th><th>Actual Spend</th><th>Variance</th><th>Correction Action</th></tr>
+      <tr><td>1</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>2</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>3</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>4</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>5</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>6</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    </table>
+
+    <h3>Owner Tasks / Material To-Do (write your own)</h3>
+    <div class="check"><ul>
+      <li>______________________________________________</li>
+      <li>______________________________________________</li>
+      <li>______________________________________________</li>
+      <li>______________________________________________</li>
+      <li>______________________________________________</li>
+      <li>______________________________________________</li>
+    </ul></div>
+
+    <h3>Weekly Notes</h3>
+    <div class="line xl"></div><div class="line xl"></div><div class="line xl"></div><div class="line xl"></div>
+  </section>
+
+  <section class="sheet">
+    <div class="ribbon"></div>
+    <h2>Worksheet 7 — Exit + Price Adjustment Plan</h2>
+    <p><strong>Goal:</strong> Exit fast and protect capital if market response is weak.</p>
+
+    <div class="guide"><strong>Exit guidance:</strong> Default target is contract within <strong>14 DOM</strong>. If you miss that, reduce price based on the decision chart below instead of waiting.</div>
+    <div class="grid2">
+      <div class="box">
+        <h3>Retail Plan</h3>
+        <p>Initial List Price: <span class="num">$________</span></p>
+        <p>Target DOM: <strong>14 days</strong></p>
+        <p>Photo/Staging Date: __________</p>
+        <p>Price Reduction Trigger Date: Use chart below.</p>
+        <p>Reduction Plan: Use chart below for % and timing.</p>
+      </div>
+      <div class="box">
+        <h3>Backup Plan</h3>
+        <p><strong>Wholesale Floor Net</strong> (minimum cash to net after all costs): <span class="num">$________</span></p>
+        <p class="small">Fill this from calculator output (do not estimate manually).</p>
+        <p>Investor List Ready: Yes / No</p>
+        <p>Hold/Rent Backup Rent: <span class="num">$________</span></p>
+        <p>Pivot Decision Date: __________</p>
+      </div>
+    </div>
+
+    <h3>Decision Rules (if X happens, do Y)</h3>
+    <table>
+      <tr><th>Market Signal</th><th>When it Triggers</th><th>Action Rule</th></tr>
+      <tr><td>Low showing activity</td><td>&lt;5 showings in first 10 days</td><td>Reduce price 1.5%-2.5% and refresh media.</td></tr>
+      <tr><td>No offers</td><td>0 offers by day 14 at market launch</td><td>Cut price to next comp-supported bracket immediately.</td></tr>
+      <tr><td>Only lowball offers</td><td>Best offer is 8%+ below ask by day 21</td><td>Check pricing vs solds; either reprice or pivot to investor exit.</td></tr>
+      <tr><td>Carrying cost burn too high</td><td>Monthly burn exceeds planned by 15%+</td><td>Accelerate exit timeline; consider wholesale floor now.</td></tr>
+      <tr><td>Inspection issues from buyers</td><td>Same objection repeats 2+ times</td><td>Pre-fix issue or credit once, then adjust list price strategy.</td></tr>
+      <tr><td>DOM exceeds target</td><td>Past target DOM with no contract</td><td>Trigger backup plan date and execute within 72 hours.</td></tr>
+    </table>
+    <h3>Hard Rules to Follow (No Exceptions)</h3>
+    <p><strong>Traffic Rule:</strong> If fewer than 5 showings in first 10 DOM, reduce price immediately.</p>
+    <p><strong>Pricing Rule:</strong> If no offers by day 14, drop list price 1.5%-2.5% to next comp-supported bracket.</p>
+    <p><strong>Pivot Rule:</strong> If no acceptable contract by day 30, execute wholesale/rental backup within 72 hours.</p>
+  </section>
+
+</div>
+</body>
+</html>
