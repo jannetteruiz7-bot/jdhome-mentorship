@@ -127,7 +127,7 @@
         <p><strong>Max Hold Time Target:</strong> <span class="num">90 days total</span> (buy + rehab + sale).</p>
         <p><strong>Complexity for this property (circle one):</strong> Light / Medium / Heavy</p>
         <p><strong>Max DOM at acquisition:</strong> ______ days</p>
-        <p><strong>Maximum Rehab Budget:</strong> <span class="num">$________</span></p>
+        <p><strong>Maximum Rehab Budget:</strong> <span class="num" id="wfMaxRehabBudget">$________</span></p>
       </div>
     </div>
 
@@ -166,7 +166,7 @@
       <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
     </table>
 
-    <div class="formula">Conservative ARV = Median Adjusted Value = <span class="num">$________________</span></div>
+    <div class="formula">Conservative ARV = Median Adjusted Value = <span class="num" id="wfConservativeArv">$________________</span></div>
     <p class="page-note">Rule: Never anchor to the highest comp. If comp spread is wide, underwrite to the lower-middle range.</p>
   </section>
 
@@ -188,8 +188,8 @@
       <tr><td>Permits/Trash/Misc</td><td></td><td></td><td></td><td></td><td></td></tr>
     </table>
 
-    <p>Subtotal Rehab: <span class="num">$________</span> | Contingency %: ____ | Contingency Amount: <span class="num">$________</span></p>
-    <div class="formula">Total Rehab Budget = Subtotal + Contingency = <span class="num">$________________</span></div>
+    <p>Subtotal Rehab: <span class="num" id="wfSubtotalRehab">$________</span> | Contingency %: <span id="wfContingencyPct">____</span> | Contingency Amount: <span class="num" id="wfContingencyAmount">$________</span></p>
+    <div class="formula">Total Rehab Budget = Subtotal + Contingency = <span class="num" id="wfTotalRehabBudget">$________________</span></div>
   </section>
 
   <section class="sheet">
@@ -233,9 +233,9 @@
 
     <table>
       <tr><th>Offer Type</th><th>Offer Price</th><th>Projected Net Profit</th><th>When to Use</th></tr>
-      <tr><td>Target</td><td><span class="num">$________</span></td><td><span class="num">$________</span></td><td>Best risk-adjusted scenario</td></tr>
-      <tr><td>Stretch</td><td><span class="num">$________</span></td><td><span class="num">$________</span></td><td>If seller counters and risk remains manageable</td></tr>
-      <tr><td>Walk-Away</td><td><span class="num">$________</span></td><td><span class="num">$________</span></td><td>Absolute max. Do not exceed.</td></tr>
+      <tr><td>Target</td><td><span class="num" id="wfTargetOffer">$________</span></td><td><span class="num" id="wfTargetProfit">$________</span></td><td>Best risk-adjusted scenario</td></tr>
+      <tr><td>Stretch</td><td><span class="num" id="wfStretchOffer">$________</span></td><td><span class="num" id="wfStretchProfit">$________</span></td><td>If seller counters and risk remains manageable</td></tr>
+      <tr><td>Walk-Away</td><td><span class="num" id="wfWalkAwayOffer">$________</span></td><td><span class="num" id="wfWalkAwayProfit">$________</span></td><td>Absolute max. Do not exceed.</td></tr>
     </table>
 
     <h3>Negotiation Notes (DOM, condition, comp spread)</h3>
@@ -346,9 +346,37 @@
 
     const purchase = Number(d.purchase || 0);
     const rehab = Number(d.rehab || 0);
+    const arv = Number(d.arv || 0);
+    const contingencyPct = Number(d.contingencyPct || 0);
     const totalCostNum = Number(String(d.totalCost || '').replace(/[^0-9.-]/g,''));
+    const profitNum = Number(String(d.profit || '').replace(/[^0-9.-]/g,''));
+    const maxOfferNum = Number(String(d.maxOffer || '').replace(/[^0-9.-]/g,''));
+
     const otherCosts = totalCostNum && purchase && rehab ? (totalCostNum - purchase - rehab) : 0;
     fill('wfOtherCosts', otherCosts ? fmtMoney(otherCosts) : '$________');
+
+    // Fill additional worksheet fields
+    fill('wfMaxRehabBudget', d.rehab ? fmtMoney(d.rehab) : '$________');
+    fill('wfConservativeArv', arv ? fmtMoney(arv) : '$________________');
+    fill('wfSubtotalRehab', rehab ? fmtMoney(rehab) : '$________');
+    fill('wfContingencyPct', contingencyPct ? `${contingencyPct.toFixed(2)}%` : '____');
+    const contingencyAmount = rehab ? rehab * (contingencyPct/100) : 0;
+    fill('wfContingencyAmount', contingencyAmount ? fmtMoney(contingencyAmount) : '$________');
+    fill('wfTotalRehabBudget', rehab ? fmtMoney(rehab + contingencyAmount) : '$________________');
+
+    // Offer ladder approximation from calculator values
+    if (maxOfferNum) {
+      const walkAway = maxOfferNum;
+      const stretch = Math.max(0, maxOfferNum - 5000);
+      const target = Math.max(0, maxOfferNum - 10000);
+      const profitAt = (offer) => profitNum + (purchase - offer);
+      fill('wfWalkAwayOffer', fmtMoney(walkAway));
+      fill('wfStretchOffer', fmtMoney(stretch));
+      fill('wfTargetOffer', fmtMoney(target));
+      fill('wfWalkAwayProfit', fmtMoney(profitAt(walkAway)));
+      fill('wfStretchProfit', fmtMoney(profitAt(stretch)));
+      fill('wfTargetProfit', fmtMoney(profitAt(target)));
+    }
   } catch(e) {
     console.warn('Auto-fill load failed', e);
   }

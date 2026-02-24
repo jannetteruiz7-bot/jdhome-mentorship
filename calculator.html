@@ -377,12 +377,56 @@ function persistWorksheetData(){
     holdMonths: $('holdMonths')?.value || '',
     interestPct: $('interestPct')?.value || '',
     contingencyPct: $('contingencyPct')?.value || '',
+    pointsPct: $('pointsPct')?.value || '',
+    sellAgentPct: $('sellAgentPct')?.value || '',
+    sellClosePct: $('sellClosePct')?.value || '',
+    acqFees: $('acqFees')?.value || '',
+    buyerCloseFees: $('buyerCloseFees')?.value || '',
+    lenderFlatFees: $('lenderFlatFees')?.value || '',
+    vacMarketing: $('vacMarketing')?.value || '',
+    repairContFlat: $('repairContFlat')?.value || '',
     profit: $('oProfit')?.textContent || '',
     totalCost: $('oTotal')?.textContent || '',
+    totalAcq: $('oAcq')?.textContent || '',
+    totalRehab: $('oRehab')?.textContent || '',
+    totalFinancing: $('oFinFees')?.textContent || '',
+    totalHolding: $('oHold')?.textContent || '',
+    totalSelling: $('oSell')?.textContent || '',
     maxOffer: $('kMaxOffer')?.textContent || '',
+    coc: $('kCoc')?.textContent || '',
+    margin: $('oMargin')?.textContent || '',
     generatedAt: new Date().toISOString()
   };
   localStorage.setItem('jdhome_last_deal', JSON.stringify(payload));
+}
+
+function hydrateFromStorage(){
+  try {
+    const raw = localStorage.getItem('jdhome_last_deal');
+    if (!raw) return false;
+    const d = JSON.parse(raw);
+    const setVal = (id, v) => { if ($(id) && v !== undefined && v !== null && v !== '') $(id).value = v; };
+
+    setVal('wsAddress', d.address);
+    setVal('wsZip', d.zip);
+    setVal('wsSqft', d.sqft);
+    setVal('purchase', d.purchase);
+    setVal('arv', d.arv);
+    setVal('sqft', d.sqft);
+    setVal('rehabFlat', d.rehab);
+    setVal('holdMonths', d.holdMonths);
+    setVal('interestPct', d.interestPct);
+    setVal('contingencyPct', d.contingencyPct);
+    setVal('pointsPct', d.pointsPct);
+    setVal('sellAgentPct', d.sellAgentPct);
+    setVal('sellClosePct', d.sellClosePct);
+    setVal('acqFees', d.acqFees);
+    setVal('buyerCloseFees', d.buyerCloseFees);
+    setVal('lenderFlatFees', d.lenderFlatFees);
+    setVal('vacMarketing', d.vacMarketing);
+    setVal('repairContFlat', d.repairContFlat);
+    return true;
+  } catch(e) { return false; }
 }
 
 function applyPreset(name){
@@ -784,7 +828,8 @@ ids.forEach(id => $(id).addEventListener('input', calc));
 Object.keys(WS_TO_CALC_MAP).forEach(id => $(id).addEventListener('input', syncWorksheetToCalculator));
 Object.values(WS_TO_CALC_MAP).forEach(id => $(id).addEventListener('input', syncCalculatorToWorksheet));
 
-resetDefaults();
+if (!hydrateFromStorage()) resetDefaults();
+else calc();
 </script>
 </body>
 </html>
