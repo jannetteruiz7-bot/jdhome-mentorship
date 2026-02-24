@@ -166,11 +166,7 @@
         <div class="field"><label for="wsPurchase">Purchase Price ($)</label><input id="wsPurchase" type="number" min="0" step="0.01" value="0" /></div>
       </div>
       <div class="col-6">
-        <div class="field"><label for="wsRehab">Estimated Rehab ($)</label><input id="wsRehab" type="number" min="0" step="0.01" value="0" /></div>
-        <div class="field"><label for="wsHoldMonths">Holding Time (months)</label><input id="wsHoldMonths" type="number" min="1" step="1" value="6" /></div>
-        <div class="field"><label for="wsInterestPct">Interest Rate (%)</label><input id="wsInterestPct" type="number" min="0" max="100" step="0.01" value="12.99" /></div>
-        <div class="field"><label for="wsContingencyPct">Rehab Contingency (%)</label><input id="wsContingencyPct" type="number" min="0" max="100" step="0.01" value="5" /></div>
-        <div class="field"><label>Projected Profit (from calculator)</label><input id="wsProjectedProfit" type="text" readonly value="$0.00" /></div>
+        <div class="field"><label>Use Step 2 for rehab, hold, rate, contingency, and profit outputs</label><input type="text" readonly value="Step 2 calculator fields are the single source of truth for those values." /></div>
       </div>
     </div>
   </section>
@@ -351,11 +347,7 @@ const ids = ['purchase','arv','rehabMode','rehabFlat','sqft','rehabPerSqft','hol
 const WS_TO_CALC_MAP = {
   wsPurchase: 'purchase',
   wsArv: 'arv',
-  wsRehab: 'rehabFlat',
-  wsSqft: 'sqft',
-  wsHoldMonths: 'holdMonths',
-  wsInterestPct: 'interestPct',
-  wsContingencyPct: 'contingencyPct'
+  wsSqft: 'sqft'
 };
 let syncingWorksheet = false;
 
@@ -380,7 +372,6 @@ function syncCalculatorToWorksheet(){
   Object.entries(WS_TO_CALC_MAP).forEach(([wsId, calcId]) => {
     if ($(wsId) && $(calcId)) $(wsId).value = $(calcId).value;
   });
-  if ($('wsProjectedProfit') && $('oProfit')) $('wsProjectedProfit').value = $('oProfit').textContent;
   syncingWorksheet = false;
 }
 
@@ -729,3 +720,4 @@ resetDefaults();
 </script>
 </body>
 </html>
+
