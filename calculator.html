@@ -697,64 +697,7 @@ function loadSample(){
 function exportPdf(){
   calc();
 
-  const money = (id) => ($(id)?.value !== undefined ? cur(Number($(id).value || 0)) : ($(id)?.textContent || 'function exportPdf(){
-  calc();
-
-  const collectSectionRows = (title, ids) => {
-    const rows = ids.map((id) => {
-      const el = $(id);
-      if (!el) return '';
-      const label = document.querySelector(`label[for="${id}"]`)?.textContent?.trim() || id;
-      const value = el.type === 'checkbox' ? (el.checked ? 'Yes' : 'No') : el.value;
-      return `<tr><td>${label}</td><td>${value}</td></tr>`;
-    }).join('');
-    return `<section><h3>${title}</h3><table><tr><th>Field</th><th>Value</th></tr>${rows}</table></section>`;
-  };
-
-  const summaryRows = Array.from(document.querySelectorAll('.out tr')).slice(1).map((tr) => {
-    const tds = tr.querySelectorAll('td');
-    if (tds.length < 2) return '';
-    return `<tr><td>${tds[0].innerText.trim()}</td><td>${tds[1].innerText.trim()}</td></tr>`;
-  }).join('');
-
-  const html = `<!doctype html>
-  <html><head><meta charset="utf-8"><title>Flip Deal Report</title>
-  <style>
-    body{font-family:Inter,Arial,sans-serif;margin:24px;color:#0f172a}
-    h1{margin:0 0 4px;font-size:24px} .muted{color:#475569;margin-bottom:16px}
-    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0 18px}
-    .kpi{border:1px solid #cbd5e1;border-radius:10px;padding:10px;background:#f8fafc}
-    .kpi .k{font-size:12px;color:#64748b}.kpi .v{font-size:18px;font-weight:700}
-    section{margin:14px 0 18px} h3{margin:0 0 8px;font-size:15px}
-    table{width:100%;border-collapse:collapse} th,td{border:1px solid #cbd5e1;padding:7px 8px;text-align:left;font-size:12px}
-    th{background:#eef2ff} .footer{margin-top:14px;font-size:11px;color:#64748b}
-    @media print { body{margin:10mm} }
-  </style></head><body>
-  <h1>Flip Deal Report</h1>
-  <div class="muted">Generated: ${new Date().toLocaleString()}</div>
-  <div class="kpis">
-    <div class="kpi"><div class="k">70% Rule Max Offer</div><div class="v">${$('kMaxOffer').textContent}</div></div>
-    <div class="kpi"><div class="k">Total Project Cost</div><div class="v">${$('kTotalCost').textContent}</div></div>
-    <div class="kpi"><div class="k">Net Profit</div><div class="v">${$('kProfit').textContent}</div></div>
-    <div class="kpi"><div class="k">Cash-on-Cash Return</div><div class="v">${$('kCoc').textContent}</div></div>
-  </div>
-  ${collectSectionRows('Worksheet Inputs', ['wsAddress','wsZip','wsSqft','wsArv','wsPurchase'])}
-  ${collectSectionRows('Printable Worksheet Values', ['purchase','arv','sqft','rehabFlat','holdMonths','interestPct','contingencyPct'])}
-  <section><h3>Worksheet Profit Output</h3><table><tr><th>Field</th><th>Value</th></tr><tr><td>Projected Profit</td><td>${$('oProfit').textContent}</td></tr></table></section>
-  ${collectSectionRows('Core Inputs', ['purchase','arv','rehabMode','rehabFlat','sqft','rehabPerSqft','holdMonths','holdMode','holdBase','monthlyHold','cashPurchase','useHardMoney75','downPct','interestPct','pointsPct','sellAgentPct','sellClosePct','contingencyPct'])}
-  ${collectSectionRows('Advanced Inputs', ['acqFees','buyerCloseFees','lenderFlatFees','vacMarketing','repairContFlat','holdOverride','holdOverrideOn','sellOverride','sellOverrideOn'])}
-  ${collectSectionRows('Hard Money Inputs', ['hmPointsPct','hmDailyInterestDays','hmCreditReportFee','hmFloodCertFee','hmProcessingFee','hmCourierFee','hmWireFee','hmRecordingFee','hmDocPrepFee','hmTaxServiceFee','hmTaxCertFee','hmAssignLeaseFee','hmMudRecordingFee','hmTitlePct'])}
-  <section><h3>Calculated Results</h3><table><tr><th>Metric</th><th>Value</th></tr>${summaryRows}</table></section>
-  <div class="footer">Prepared from JD Home Mentorship Calculator</div>
-  </body></html>`;
-
-  const w = window.open('', '_blank');
-  w.document.open();
-  w.document.write(html);
-  w.document.close();
-  w.focus();
-  setTimeout(() => w.print(), 350);
-}.00'));
+  const money = (id) => cur(Number($(id)?.value || 0));
   const num = (id) => Number($(id)?.value || 0);
   const txt = (id) => ($(id)?.value ?? '').toString().trim();
 
@@ -820,6 +763,10 @@ function exportPdf(){
   </body></html>`;
 
   const w = window.open('', '_blank');
+  if (!w) {
+    alert('Please allow pop-ups for PDF export.');
+    return;
+  }
   w.document.open();
   w.document.write(html);
   w.document.close();
@@ -841,6 +788,7 @@ resetDefaults();
 </script>
 </body>
 </html>
+
 
 
 
