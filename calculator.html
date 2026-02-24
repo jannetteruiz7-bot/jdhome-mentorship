@@ -1,225 +1,731 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Deal Profit Calculator - Premium Edition</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Flip Deal Calculator — Clean Edition</title>
   <style>
-    :root{--bg:#0c1522;--panel:#111d2e;--panel2:#17263d;--gold:#caa35a;--gold2:#e7c98f;--ink:#eef3fa;--muted:#b8c4d6;--line:rgba(255,255,255,.14);--ok:#133326;--bad:#3a1f22}
-    body{font-family:Inter,Arial,sans-serif;background:radial-gradient(1000px 420px at 90% -20%,rgba(202,163,90,.15),transparent 60%),var(--bg);color:var(--ink);margin:0}
-    .wrap{max-width:1040px;margin:18px auto;padding:0 14px}
-    .card{background:linear-gradient(160deg,rgba(255,255,255,.03),rgba(255,255,255,.01));border:1px solid var(--line);border-radius:14px;padding:16px;margin:12px 0}
-    .hero{background:linear-gradient(135deg,var(--panel),var(--panel2));color:#fff}
-    .hero h1{margin:0 0 8px;font-family:Georgia,Times New Roman,serif}
-    .nav a{display:inline-block;margin:4px 8px 0 0;padding:7px 11px;border-radius:999px;background:rgba(202,163,90,.2);border:1px solid rgba(202,163,90,.4);color:#f4e7cd;text-decoration:none;font-size:12px}
-    .ribbon{height:6px;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:999px;margin:0 0 10px}
-    h2{margin:0 0 10px;font-size:20px;color:#f5d9a0}
-    table{width:100%;border-collapse:collapse}
-    th,td{border:1px solid var(--line);padding:8px;font-size:13px}
-    th{background:rgba(255,255,255,.06);text-align:left;color:#f0dcc0}
-    input{width:100%;padding:7px;border:1px solid rgba(255,255,255,.25);border-radius:7px;background:rgba(12,21,34,.65);color:#fff}
-    .num{text-align:right}
-    .summary{background:var(--ok);border:1px solid #2a6e4f;padding:10px;border-radius:10px}
-    .warn{background:var(--bad);border:1px solid #7a4248;padding:10px;border-radius:10px}
+    :root{
+      --bg:#0b1220;
+      --panel:#111a2e;
+      --panel2:#17233b;
+      --line:rgba(255,255,255,.16);
+      --text:#e9f0ff;
+      --muted:#a7b6d8;
+      --accent:#5cc8ff;
+      --good:#1c4c36;
+      --warn:#6b5217;
+      --bad:#5a1f2a;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--text);background:radial-gradient(900px 420px at 90% -20%,rgba(92,200,255,.13),transparent 60%),var(--bg)}
+    .wrap{max-width:1100px;margin:20px auto;padding:0 14px 30px}
+    .card{background:linear-gradient(155deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+    h1,h2,h3{margin:0 0 8px}
+    p{margin:0 0 8px;color:var(--muted)}
+    .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    button{background:linear-gradient(180deg,#78d5ff,#42b6f5);border:none;color:#052033;padding:9px 12px;border-radius:10px;font-weight:700;cursor:pointer}
+    button.alt{background:#1a2a47;color:#dce8ff;border:1px solid var(--line)}
+
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:10px}
+    .col-6{grid-column:span 12}
+    @media(min-width:900px){.col-6{grid-column:span 6}}
+
+    .field{margin-bottom:8px}
+    label{display:block;font-size:12px;margin-bottom:5px}
+    .help{font-size:11px;color:var(--muted)}
+    input,select{width:100%;padding:9px;border-radius:10px;border:1px solid var(--line);background:#0f1830;color:var(--text)}
+    input[readonly]{opacity:.95;background:#0d162b}
+
+    .kpis{display:grid;grid-template-columns:repeat(2,minmax(140px,1fr));gap:8px}
+    @media(min-width:760px){.kpis{grid-template-columns:repeat(4,minmax(140px,1fr))}}
+    .kpi{background:#0e1931;border:1px solid var(--line);border-radius:10px;padding:8px}
+    .kpi .k{font-size:11px;color:var(--muted)}
+    .kpi .v{font-size:18px;font-weight:800;margin-top:4px}
+
+    .out{width:100%;border-collapse:collapse;margin-top:8px}
+    .out th,.out td{border:1px solid var(--line);padding:7px 8px;font-size:13px}
+    .out th{text-align:left;background:rgba(255,255,255,.05)}
+    .num{text-align:right;font-variant-numeric:tabular-nums}
+
+    details{border:1px dashed var(--line);border-radius:10px;padding:8px;background:rgba(255,255,255,.02)}
+    summary{cursor:pointer;font-weight:700}
+
+    .alert{border:1px solid;padding:9px;border-radius:10px;margin-top:8px;font-size:13px}
+    .good{background:var(--good);border-color:#2c6c51}
+    .warn{background:var(--warn);border-color:#9a7c2b}
+    .bad{background:var(--bad);border-color:#94404f}
+
+    .inline{display:flex;gap:8px;align-items:center}
+    .inline input[type=checkbox]{width:auto}
+
+    .mono{font-family:ui-monospace,Consolas,monospace}
     .small{font-size:12px;color:var(--muted)}
-    .copy{background:rgba(202,163,90,.12);border:1px solid rgba(202,163,90,.45);border-radius:10px;padding:10px}
-    .copy pre{white-space:pre-wrap;margin:0;font-family:Consolas,Monaco,monospace;font-size:12px;line-height:1.4;color:#f6eddc}
-    @media print{.nav{display:none}}
+
+    /* Lexica-inspired dark neon / glass vibe overrides */
+    :root{
+      --bg:#070911;
+      --panel:rgba(17,24,39,.72);
+      --panel2:rgba(30,41,59,.66);
+      --line:rgba(148,163,184,.28);
+      --text:#e6f0ff;
+      --muted:#9bb0d3;
+      --accent:#7dd3fc;
+      --accent2:#a78bfa;
+      --good:#133f31;
+      --warn:#5b4a13;
+      --bad:#4f1d29;
+    }
+    body{
+      position:relative;
+      background:linear-gradient(140deg,#06080f 0%,#0b1020 46%,#090d1a 100%);
+      color:var(--text);
+      overflow-x:hidden;
+    }
+    body::before{
+      content:"";
+      position:fixed;
+      inset:-40px;
+      z-index:-2;
+      background:
+        radial-gradient(1100px 560px at 85% -10%, rgba(167,139,250,.28), transparent 58%),
+        radial-gradient(900px 520px at -10% 0%, rgba(125,211,252,.20), transparent 62%),
+        linear-gradient(120deg, rgba(99,102,241,.14), rgba(56,189,248,.10), rgba(236,72,153,.10)),
+        url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=2200&q=80');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      filter: blur(18px) saturate(112%);
+      transform: scale(1.08);
+    }
+    body::after{
+      content:"";
+      position:fixed;
+      inset:0;
+      z-index:-1;
+      background:rgba(6,10,20,.35);
+    }
+    .card{
+      background:linear-gradient(160deg,var(--panel),var(--panel2));
+      border:1px solid var(--line);
+      backdrop-filter: blur(8px);
+      box-shadow:
+        0 10px 28px rgba(0,0,0,.35),
+        inset 0 1px 0 rgba(255,255,255,.04);
+    }
+    input,select{
+      background:linear-gradient(180deg,rgba(12,20,40,.92),rgba(11,19,36,.96));
+      border:1px solid rgba(148,163,184,.35);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.02);
+    }
+    input:focus,select:focus{
+      outline:none;
+      border-color:rgba(125,211,252,.65);
+      box-shadow:0 0 0 3px rgba(125,211,252,.18);
+    }
+    button{
+      background:linear-gradient(180deg,#8ad7ff,#65c2ff 58%,#57b4f4);
+      color:#04172c;
+      box-shadow:0 7px 18px rgba(34,211,238,.28);
+    }
+    button.alt{
+      background:linear-gradient(180deg,rgba(30,41,59,.92),rgba(30,41,59,.72));
+      border:1px solid rgba(148,163,184,.35);
+      color:#e2e8f0;
+    }
+    .kpi{
+      background:linear-gradient(180deg,rgba(14,25,49,.85),rgba(14,25,49,.55));
+      border:1px solid rgba(148,163,184,.35);
+    }
+    .out th{background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.03));}
+    details{border:1px dashed rgba(125,211,252,.34);background:rgba(15,23,42,.38)}
   </style>
-  <script> var MemberSpace = window.MemberSpace || {"subdomain":"jannetteruiz7-bot1"}; (function(d){ var s = d.createElement("script"); s.src = "https://cdn.memberspace.com/scripts/widgets.js"; var e = d.getElementsByTagName("script")[0]; e.parentNode.insertBefore(s,e); }(document)); </script>
 </head>
 <body>
 <div class="wrap">
-  <div class="card hero">
-    <h1>Flip Deal Profit Calculator</h1>
-    <p>Premium workbook style • editable defaults • instant deal grade</p>
-  </div>
+  <section class="card">
+    <h1>Flip Property / Deal Analysis Calculator</h1>
+    <p>Worksheet first, calculator second. Fill the worksheet and it prefills the calculator automatically.</p>
+    <div class="toolbar">
+      <button id="loadSample">Load Sample Deal</button>
+      <button class="alt" id="resetDefaults">Reset to Defaults</button>
+      <button class="alt" id="copySummary">Copy Inputs + Results</button>
+      <button class="alt" id="exportCsv">Export CSV</button>
+    </div>
+  </section>
 
-  <div class="card nav">
-    <a href="./index.html">Back to Dashboard</a>
-    <a href="./worksheet-pack.html">Open Worksheet Pack</a>
-  </div>
+  <section class="card" id="worksheetCard">
+    <h3>Worksheet (Step 1)</h3>
+    <p>Enter deal facts here first. These values sync into the calculator below.</p>
+    <div class="grid">
+      <div class="col-6">
+        <div class="field"><label for="wsAddress">Property Address</label><input id="wsAddress" type="text" placeholder="123 Main St" /></div>
+        <div class="field"><label for="wsZip">ZIP</label><input id="wsZip" type="text" placeholder="77095" /></div>
+        <div class="field"><label for="wsSqft">Square Feet</label><input id="wsSqft" type="number" min="0" step="1" value="0" /></div>
+        <div class="field"><label for="wsArv">ARV ($)</label><input id="wsArv" type="number" min="0" step="0.01" value="0" /></div>
+        <div class="field"><label for="wsPurchase">Purchase Price ($)</label><input id="wsPurchase" type="number" min="0" step="0.01" value="0" /></div>
+      </div>
+      <div class="col-6">
+        <div class="field"><label for="wsRehab">Estimated Rehab ($)</label><input id="wsRehab" type="number" min="0" step="0.01" value="0" /></div>
+        <div class="field"><label for="wsHoldMonths">Holding Time (months)</label><input id="wsHoldMonths" type="number" min="1" step="1" value="6" /></div>
+        <div class="field"><label for="wsInterestPct">Interest Rate (%)</label><input id="wsInterestPct" type="number" min="0" max="100" step="0.01" value="12.99" /></div>
+        <div class="field"><label for="wsContingencyPct">Rehab Contingency (%)</label><input id="wsContingencyPct" type="number" min="0" max="100" step="0.01" value="5" /></div>
+        <div class="field"><label>Projected Profit (from calculator)</label><input id="wsProjectedProfit" type="text" readonly value="$0.00" /></div>
+      </div>
+    </div>
+  </section>
 
-  <div class="card"><div class="ribbon"></div>
-    <h2>1) Core Deal Inputs</h2>
-    <table>
-      <tr><th>Input</th><th>Value</th></tr>
-      <tr><td>Asking Price</td><td><input id="ask" type="number" value="205000"></td></tr>
-      <tr><td>Your Current Offer / Purchase Price</td><td><input id="purchase" type="number" value="200000"></td></tr>
-      <tr><td>ARV (After Repair Value)</td><td><input id="arv" type="number" value="320000"></td></tr>
-      <tr><td>Rehab Budget</td><td><input id="rehab" type="number" value="45000"></td></tr>
-      <tr><td>Hold Period (months)</td><td><input id="holdMonths" type="number" value="6"></td></tr>
-      <tr><td>Loan-to-Cost % (LTC)</td><td><input id="ltc" type="number" value="90"></td></tr>
+  <section class="card">
+    <h3>Calculator (Step 2)</h3>
+    <div class="grid">
+      <div class="col-6">
+        <h3>Core Inputs</h3>
+        <div class="field"><label for="preset">Preset</label><select id="preset"><option value="default">Default (conservative)</option><option value="catalyst">Catalyst lender profile</option><option value="urban">Urban high-cost</option><option value="rural">Rural low-cost</option></select></div>
+        <div class="field"><label for="purchase">Purchase Price ($)</label><input id="purchase" type="number" min="0" step="0.01" value="0" /></div>
+        <div class="field"><label for="arv">ARV / Projected Sale Price ($)</label><input id="arv" type="number" min="0" step="0.01" value="0" /></div>
+        <div class="field"><label for="rehabMode">Rehab input mode</label><select id="rehabMode"><option value="flat">Flat rehab budget ($)</option><option value="perSqft">Estimate by $/sqft</option></select></div>
+        <div class="field" id="rehabFlatWrap"><label for="rehabFlat">Estimated Rehab ($)</label><input id="rehabFlat" type="number" min="0" step="0.01" value="0" /></div>
+        <div id="rehabSqftWrap" style="display:none">
+          <div class="field"><label for="sqft">Square feet</label><input id="sqft" type="number" min="0" step="1" value="1800" /></div>
+          <div class="field"><label for="rehabPerSqft">Rehab $ / sqft</label><input id="rehabPerSqft" type="number" min="0" step="0.01" value="25" /></div>
+        </div>
+        <div class="field"><label for="holdMonths">Holding time (months)</label><input id="holdMonths" type="number" min="1" step="1" value="6" /></div>
+        <div class="field"><label for="holdMode">Holding cost mode</label><select id="holdMode"><option value="auto">Auto by typical % (recommended)</option><option value="manual">Manual monthly total ($)</option></select></div>
+        <div class="field"><label for="holdBase">Auto holding base</label><select id="holdBase"><option value="purchase">Use purchase price</option><option value="arv">Use ARV</option></select><div class="help">Typical underwriting uses purchase as base; switch to ARV if preferred.</div></div>
+        <div class="field" id="monthlyHoldWrap"><label for="monthlyHold">Monthly holding costs ($)</label><input id="monthlyHold" type="number" min="0" step="0.01" value="900" /><div class="help">Used only in manual mode.</div></div>
+        <div class="field" id="autoHoldWrap"><label>Auto monthly holding estimate</label><input id="autoMonthlyHold" type="text" readonly value="$0.00" /><div class="help">= Taxes + Insurance + Utilities + HOA + Maintenance (from preset percentages).</div></div>
+      </div>
+
+      <div class="col-6">
+        <h3>Financing & Selling (simple)</h3>
+        <div class="field inline"><input id="cashPurchase" type="checkbox" /><label for="cashPurchase" style="margin:0">Cash purchase (no loan interest/points)</label></div>
+        <div class="field inline"><input id="useHardMoney75" type="checkbox" checked /><label for="useHardMoney75" style="margin:0">Use hard-money 75% ARV logic for down payment</label></div>
+        <div class="field"><label for="downPct">Down payment (%)</label><input id="downPct" type="number" min="0" max="100" step="0.01" value="20" /><div class="help" id="downPctHelp">Active when hard-money override is off.</div></div>
+        <div class="field"><label for="interestPct">Loan interest rate (%)</label><input id="interestPct" type="number" min="0" max="100" step="0.01" value="12.99" /></div>
+        <div class="field"><label for="pointsPct">Loan points (%)</label><input id="pointsPct" type="number" min="0" max="100" step="0.01" value="2" /></div>
+
+        <div class="field"><label for="sellAgentPct">Agent commission (%)</label><input id="sellAgentPct" type="number" min="0" max="100" step="0.01" value="6" /></div>
+        <div class="field"><label for="sellClosePct">Seller closing (%)</label><input id="sellClosePct" type="number" min="0" max="100" step="0.01" value="1" /></div>
+
+        <div class="field">
+          <label for="contingencyPct">Rehab contingency (%)</label>
+          <input id="contingencyPct" type="number" min="0" max="100" step="0.01" value="5" />
+          <div class="help">Default assumes unknown overruns before detailed contractor bids.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <details>
+      <summary>Advanced / Detailed Inputs</summary>
+      <div class="grid" style="margin-top:8px">
+        <div class="col-6">
+          <div class="field"><label for="acqFees">Acquisition fees (inspection/appraisal/etc) $</label><input id="acqFees" type="number" min="0" step="0.01" value="1500" /></div>
+          <div class="field"><label for="buyerCloseFees">Buyer closing fees ($)</label><input id="buyerCloseFees" type="number" min="0" step="0.01" value="0" /></div>
+          <div class="field"><label for="lenderFlatFees">Lender flat fees ($)</label><input id="lenderFlatFees" type="number" min="0" step="0.01" value="0" /></div>
+        </div>
+        <div class="col-6">
+          <div class="field"><label for="vacMarketing">Vacancy/marketing allowance ($)</label><input id="vacMarketing" type="number" min="0" step="0.01" value="0" /></div>
+          <div class="field"><label for="repairContFlat">Extra repair contingency flat ($)</label><input id="repairContFlat" type="number" min="0" step="0.01" value="0" /></div>
+
+          <div class="field">
+            <label for="holdOverride">Holding cost total override ($, optional)</label>
+            <input id="holdOverride" type="number" min="0" step="0.01" placeholder="blank = formula" />
+            <div class="inline small"><input id="holdOverrideOn" type="checkbox" /> Enable override <button class="alt" id="restoreHold" type="button">Restore formula</button></div>
+          </div>
+
+          <div class="field">
+            <label for="sellOverride">Selling cost total override ($, optional)</label>
+            <input id="sellOverride" type="number" min="0" step="0.01" placeholder="blank = formula" />
+            <div class="inline small"><input id="sellOverrideOn" type="checkbox" /> Enable override <button class="alt" id="restoreSell" type="button">Restore formula</button></div>
+          </div>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <section class="card">
+    <h3>Quick Results</h3>
+    <div class="kpis">
+      <div class="kpi"><div class="k">70% Rule Max Offer</div><div class="v" id="kMaxOffer">$0.00</div></div>
+      <div class="kpi"><div class="k">Total Project Cost</div><div class="v" id="kTotalCost">$0.00</div></div>
+      <div class="kpi"><div class="k">Net Profit</div><div class="v" id="kProfit">$0.00</div></div>
+      <div class="kpi"><div class="k">Cash-on-Cash Return</div><div class="v" id="kCoc">0.00%</div></div>
+    </div>
+
+    <table class="out">
+      <tr><th>Metric</th><th class="num">Value</th><th>Formula</th></tr>
+      <tr><td>Total acquisition costs</td><td class="num" id="oAcq">$0.00</td><td class="mono">purchase + acq fees + buyer close fees</td></tr>
+      <tr><td>Total rehab</td><td class="num" id="oRehab">$0.00</td><td class="mono">rehab + contingency% + flat contingency</td></tr>
+      <tr><td>Financing fees</td><td class="num" id="oFinFees">$0.00</td><td class="mono">(loan * points%) + lender flat fees + hold interest</td></tr>
+      <tr><td>Selling costs</td><td class="num" id="oSell">$0.00</td><td class="mono">ARV * (agent% + seller close%) (+ override)</td></tr>
+      <tr><td>Holding costs</td><td class="num" id="oHold">$0.00</td><td class="mono">monthly hold * months (+ override)</td></tr>
+      <tr><td><strong>Total project cost</strong></td><td class="num" id="oTotal"><strong>$0.00</strong></td><td class="mono">acq + rehab + hold + financing + selling + vac/marketing</td></tr>
+      <tr><td>Projected sale proceeds</td><td class="num" id="oSaleNet">$0.00</td><td class="mono">ARV - selling costs - loan payoff</td></tr>
+      <tr><td><strong>Net profit</strong></td><td class="num" id="oProfit"><strong>$0.00</strong></td><td class="mono">ARV - total project cost</td></tr>
+      <tr><td>Profit margin</td><td class="num" id="oMargin">0.00%</td><td class="mono">net profit / ARV</td></tr>
+      <tr><td>Cash invested</td><td class="num" id="oCash">$0.00</td><td class="mono">down payment/borrower gap + acq + rehab + hold + lender fees + vac/marketing (excludes selling fees)</td></tr>
+      <tr><td>Cash-on-cash return</td><td class="num" id="oCoc">0.00%</td><td class="mono">net profit / cash invested (annualized if hold > 12)</td></tr>
     </table>
-  </div>
 
-  <div class="card"><div class="ribbon"></div>
-    <h2>2) Hard Money + Acquisition Costs</h2>
-    <table>
-      <tr><th>Cost Item</th><th>Default</th><th>Auto $</th></tr>
-      <tr><td>Lender Points (% of loan)</td><td><input id="pointsPct" type="number" value="2"></td><td class="num" id="pointsAmt"></td></tr>
-      <tr><td>Interest Rate (annual %)</td><td><input id="ratePct" type="number" value="11"></td><td class="num" id="interestAmt"></td></tr>
-      <tr><td>Underwriting/Admin fee</td><td><input id="uwFee" type="number" value="1495"></td><td class="num" id="uwFeeAmt"></td></tr>
-      <tr><td>Appraisal</td><td><input id="appraisal" type="number" value="750"></td><td class="num" id="appraisalAmt"></td></tr>
-      <tr><td>Inspection/Draw fees total</td><td><input id="drawFees" type="number" value="900"></td><td class="num" id="drawFeesAmt"></td></tr>
-      <tr><td>Lender docs/wire/misc fees</td><td><input id="lenderMisc" type="number" value="500"></td><td class="num" id="lenderMiscAmt"></td></tr>
-      <tr><td>Title + escrow (buy side)</td><td><input id="titleBuy" type="number" value="2200"></td><td class="num" id="titleBuyAmt"></td></tr>
-      <tr><td>Recording + transfer + filing</td><td><input id="recording" type="number" value="450"></td><td class="num" id="recordingAmt"></td></tr>
-      <tr><td>Survey (if needed)</td><td><input id="survey" type="number" value="550"></td><td class="num" id="surveyAmt"></td></tr>
+    <div id="alerts"></div>
+    <p class="small">Editable fields are the inputs above.</p>
+  </section>
+
+  <section class="card">
+    <h3>Down Payment & Cash-to-Close (Hard Money 75% ARV)</h3>
+    <p id="hmSummary">—</p>
+    <div class="grid" style="margin-bottom:8px">
+      <div class="col-6">
+        <div class="field"><label for="hmPointsPct">Loan Origination / Points (%)</label><input id="hmPointsPct" type="number" min="0" max="100" step="0.01" value="2" /></div>
+      </div>
+      <div class="col-6">
+        <div class="field"><label for="hmDailyInterestDays">Daily interest days</label><input id="hmDailyInterestDays" type="number" min="0" max="31" step="1" value="15" /><div class="help">Prepaid daily interest = (loan × rate / 365) × days</div></div>
+      </div>
+
+      <div class="col-6"><div class="field"><label for="hmCreditReportFee">Credit report fee ($)</label><input id="hmCreditReportFee" type="number" min="0" step="0.01" value="29" /></div></div>
+      <div class="col-6"><div class="field"><label for="hmFloodCertFee">Flood cert fee ($)</label><input id="hmFloodCertFee" type="number" min="0" step="0.01" value="13" /></div></div>
+      <div class="col-6"><div class="field"><label for="hmProcessingFee">Processing fee ($)</label><input id="hmProcessingFee" type="number" min="0" step="0.01" value="1499" /></div></div>
+      <div class="col-6"><div class="field"><label for="hmCourierFee">Courier fee ($)</label><input id="hmCourierFee" type="number" min="0" step="0.01" value="50" /></div></div>
+      <div class="col-6"><div class="field"><label for="hmWireFee">Wire fee ($)</label><input id="hmWireFee" type="number" min="0" step="0.01" value="25" /></div></div>
+      <div class="col-6"><div class="field"><label for="hmRecordingFee">Recording fee ($)</label><input id="hmRecordingFee" type="number" min="0" step="0.01" value="192" /></div></div>
+      <div class="col-6"><div class="field"><label for="hmDocPrepFee">Doc prep fee ($)</label><input id="hmDocPrepFee" type="number" min="0" step="0.01" value="570" /></div></div>
+      <div class="col-6"><div class="field"><label for="hmTaxServiceFee">Tax service fee ($)</label><input id="hmTaxServiceFee" type="number" min="0" step="0.01" value="99.95" /></div></div>
+      <div class="col-6"><div class="field"><label for="hmTaxCertFee">Tax certificate fee ($)</label><input id="hmTaxCertFee" type="number" min="0" step="0.01" value="75" /></div></div>
+      <div class="col-6"><div class="field"><label for="hmAssignLeaseFee">Assignments of leases/rents recording fee ($)</label><input id="hmAssignLeaseFee" type="number" min="0" step="0.01" value="41" /></div></div>
+      <div class="col-6"><div class="field"><label for="hmMudRecordingFee">MUD recording fee ($)</label><input id="hmMudRecordingFee" type="number" min="0" step="0.01" value="33" /></div></div>
+
+      <div class="col-6">
+        <div class="field"><label for="hmTitlePct">Title fees (% of purchase)</label><input id="hmTitlePct" type="number" min="0" max="100" step="0.01" value="1.25" /></div>
+      </div>
+    </div>
+    <table class="out">
+      <tr><th>Row</th><th class="num">Value</th><th>Formula</th></tr>
+      <tr><td>ARV</td><td class="num" id="hmArv">$0.00</td><td class="mono">ARV</td></tr>
+      <tr><td>Purchase Price</td><td class="num" id="hmPurchase">$0.00</td><td class="mono">Purchase</td></tr>
+      <tr><td>Rehab Cost</td><td class="num" id="hmRehab">$0.00</td><td class="mono">Rehab total</td></tr>
+      <tr><td>Total Acquisition Cost (Purchase + Rehab)</td><td class="num" id="hmTotalAcq">$0.00</td><td class="mono">purchase + rehab</td></tr>
+      <tr><td>Lender Max (75% of ARV)</td><td class="num" id="hmLenderMax">$0.00</td><td class="mono">0.75 × ARV</td></tr>
+      <tr><td>Loanable Amount (actual funded)</td><td class="num" id="hmLoanable">$0.00</td><td class="mono">min(total acquisition, lender max)</td></tr>
+      <tr><td>Borrower Contribution to Deal</td><td class="num" id="hmBorrower">$0.00</td><td class="mono">max(0, total acquisition − loanable)</td></tr>
+      <tr><td>Lender Fees (itemized + points + daily interest)</td><td class="num" id="hmLenderFees">$0.00</td><td class="mono">(loanable × points%) + itemized fees (incl. tax svc/cert + recording extras) + prepaid daily interest</td></tr>
+      <tr><td>Title Fees (% of purchase)</td><td class="num" id="hmTitleFees">$0.00</td><td class="mono">purchase × title%</td></tr>
+      <tr><td><strong>Total Cash-to-Close</strong></td><td class="num" id="hmCashToClose"><strong>$0.00</strong></td><td class="mono">borrower contribution + lender fees + title fees</td></tr>
     </table>
-  </div>
+  </section>
 
-  <div class="card"><div class="ribbon"></div>
-    <h2>3) Holding Costs (Monthly)</h2>
-    <table>
-      <tr><th>Cost Item</th><th>Monthly</th><th>Total Hold $</th></tr>
-      <tr><td>Property Taxes</td><td><input id="taxMo" type="number" value="450"></td><td class="num" id="taxTot"></td></tr>
-      <tr><td>Insurance (vacant/builders risk)</td><td><input id="insMo" type="number" value="250"></td><td class="num" id="insTot"></td></tr>
-      <tr><td>Utilities</td><td><input id="utilMo" type="number" value="300"></td><td class="num" id="utilTot"></td></tr>
-      <tr><td>HOA</td><td><input id="hoaMo" type="number" value="0"></td><td class="num" id="hoaTot"></td></tr>
-      <tr><td>Lawn/Pest/Maintenance</td><td><input id="maintMo" type="number" value="150"></td><td class="num" id="maintTot"></td></tr>
-    </table>
-  </div>
-
-  <div class="card"><div class="ribbon"></div>
-    <h2>4) Selling Costs</h2>
-    <table>
-      <tr><th>Cost Item</th><th>Default</th><th>Auto $</th></tr>
-      <tr><td>Agent Commissions (% of sale)</td><td><input id="agentPct" type="number" value="6"></td><td class="num" id="agentAmt"></td></tr>
-      <tr><td>Seller Closing Costs (% of sale)</td><td><input id="sellClosePct" type="number" value="1.5"></td><td class="num" id="sellCloseAmt"></td></tr>
-      <tr><td>Buyer Concessions (% of sale)</td><td><input id="concPct" type="number" value="0"></td><td class="num" id="concAmt"></td></tr>
-      <tr><td>Staging/Photos/Marketing</td><td><input id="marketing" type="number" value="1800"></td><td class="num" id="marketingAmt"></td></tr>
-    </table>
-  </div>
-
-  <div class="card"><div class="ribbon"></div>
-    <h2>5) Contingency + Summary</h2>
-    <table>
-      <tr><th>Item</th><th>Value</th></tr>
-      <tr><td>Contingency % on rehab</td><td><input id="contPct" type="number" value="15"></td></tr>
-      <tr><td>Loan Amount (auto from LTC)</td><td class="num" id="loanAmt"></td></tr>
-      <tr><td>Total Acquisition + Loan Costs</td><td class="num" id="acqTotal"></td></tr>
-      <tr><td>Total Holding Costs</td><td class="num" id="holdTotal"></td></tr>
-      <tr><td>Total Selling Costs</td><td class="num" id="sellTotal"></td></tr>
-      <tr><td>Contingency Amount</td><td class="num" id="contAmt"></td></tr>
-      <tr><td><strong>Total Project Costs</strong></td><td class="num" id="totalCosts"></td></tr>
-      <tr><td><strong>Projected Net Profit</strong></td><td class="num" id="profit"></td></tr>
-      <tr><td><strong>Profit as % of ARV</strong></td><td class="num" id="profitPct"></td></tr>
-    </table>
-    <div class="summary" id="grade"></div>
-    <div class="warn small">Defaults are typical ranges, not quotes. Replace with real lender/title/insurance numbers for every deal.</div>
-  </div>
-
-  <div class="card"><div class="ribbon"></div>
-    <h2>6) Auto Offer Ladder (for Worksheet 5)</h2>
-    <p class="small">These are max offer ceilings based on profit goals. If ask is lower than a ceiling, use ask or negotiate lower.</p>
-    <table>
-      <tr><th>Offer Type</th><th>Profit Goal</th><th>Max Offer</th><th>Projected Net Profit at Max Offer</th></tr>
-      <tr><td>Target</td><td>$40,000</td><td class="num" id="targetOffer"></td><td class="num" id="targetProfit"></td></tr>
-      <tr><td>Stretch</td><td>$30,000</td><td class="num" id="stretchOffer"></td><td class="num" id="stretchProfit"></td></tr>
-      <tr><td>Walk-Away</td><td>$25,000</td><td class="num" id="walkOffer"></td><td class="num" id="walkProfit"></td></tr>
-    </table>
-  </div>
-
-  <div class="card"><div class="ribbon"></div>
-    <h2>7) Auto Exit Number (for Worksheet 7)</h2>
-    <table>
-      <tr><th>Item</th><th>Value</th></tr>
-      <tr><td>Wholesale Floor Net (minimum net profit target)</td><td class="num" id="whFloor"></td></tr>
-      <tr><td>Wholesale Exit Sale Price Needed (to hit floor net)</td><td class="num" id="whSaleNeeded"></td></tr>
-    </table>
-    <p class="small">Wholesale Floor Net is auto-set to the higher of $10,000 or 3% of ARV.</p>
-  </div>
-
-  <div class="card copy"><div class="ribbon"></div>
-    <h2>8) Copy to Worksheet 5 + 7</h2>
-    <pre id="worksheetCopy"></pre>
-  </div>
+  <section class="card small">
+    <h3>Changelog / README</h3>
+    <ul>
+      <li>Reduced clutter: moved non-essential fields into <strong>Advanced / Detailed</strong>.</li>
+      <li>Added instant auto-calc on every input change (no submit button).</li>
+      <li>Added preset assumptions block for easy editing by area profile.</li>
+      <li>Added 70% rule, break-even warnings, margin, cash invested, CoC return.</li>
+      <li>Added override+restore pattern for calculated holding/selling totals.</li>
+      <li>Added reset, sample deal, copy summary, and CSV export.</li>
+    </ul>
+    <p><strong>Default assumptions (conservative):</strong> Agent 6%, seller close 1%, rehab contingency 5%, buyer close fees $0, acquisition fees $1,500, lender flat fees $0, monthly hold $900. Hard-money lender fees include credit/flood/processing/courier/wire/recording/doc prep + tax service/tax cert + MUD/assignment recording.</p>
+    <p><strong>Area presets:</strong> Edit <span class="mono">AREA_PRESETS</span> in script to add zip/city profiles.</p>
+  </section>
 </div>
 
 <script>
-function fmt(n){return '$'+Number(n).toLocaleString(undefined,{maximumFractionDigits:0})}
-function val(id){return Number(document.getElementById(id).value||0)}
-function set(id,v){document.getElementById(id).textContent=v}
-function calc(){
-  const ask=val('ask'), purchase=val('purchase'), arv=val('arv'), rehab=val('rehab'), hold=val('holdMonths');
-  const ltc=val('ltc')/100;
-  const pointsPct=val('pointsPct')/100;
-  const rateFactor=(val('ratePct')/100)*(hold/12);
+/*
+DEFAULTS / AREA ASSUMPTIONS (EDIT HERE)
+- Conservative default assumes typical U.S. flip underwriting:
+  agent 6%, seller close 1%, rehab contingency 10%, moderate hold costs.
+- Presets can be extended by adding keys (e.g., zip_77077) and wiring lookup logic.
+*/
+const AREA_PRESETS = {
+  // hold*Pct fields are ANNUAL percentages of selected base (purchase/arv)
+  default: { agentPct: 6, sellerClosePct: 1, contingencyPct: 5, monthlyHold: 900, acqFees: 1500, buyerCloseFees: 0, lenderFlatFees: 0, holdTaxPct: 2.2, holdInsPct: 0.7, holdUtilPct: 0.6, holdHoaPct: 0.2, holdMaintPct: 0.9 },
+  catalyst:{ agentPct: 6, sellerClosePct: 1, contingencyPct: 5, monthlyHold: 900, acqFees: 1500, buyerCloseFees: 0, lenderFlatFees: 0, hmPointsPct: 2, hmDailyInterestDays: 15, hmCreditReportFee: 29, hmFloodCertFee: 13, hmProcessingFee: 1499, hmCourierFee: 50, hmWireFee: 25, hmRecordingFee: 192, hmDocPrepFee: 570, hmTaxServiceFee: 99.95, hmTaxCertFee: 75, hmAssignLeaseFee: 41, hmMudRecordingFee: 33, hmTitlePct: 1.25, holdTaxPct: 2.2, holdInsPct: 0.7, holdUtilPct: 0.6, holdHoaPct: 0.2, holdMaintPct: 0.9 },
+  urban:   { agentPct: 6, sellerClosePct: 1.5, contingencyPct: 12, monthlyHold: 1400, acqFees: 2200, buyerCloseFees: 3500, lenderFlatFees: 1200, holdTaxPct: 2.4, holdInsPct: 0.8, holdUtilPct: 0.7, holdHoaPct: 0.4, holdMaintPct: 1.0 },
+  rural:   { agentPct: 5, sellerClosePct: 1, contingencyPct: 8, monthlyHold: 650, acqFees: 1200, buyerCloseFees: 1800, lenderFlatFees: 700, holdTaxPct: 1.8, holdInsPct: 0.6, holdUtilPct: 0.5, holdHoaPct: 0.05, holdMaintPct: 0.8 }
+};
 
-  const loan=purchase*ltc;
-  const points=loan*pointsPct;
-  const interest=loan*rateFactor;
-  const fixedAcq=val('uwFee')+val('appraisal')+val('drawFees')+val('lenderMisc')+val('titleBuy')+val('recording')+val('survey');
-  const acq=points+interest+fixedAcq;
+const $ = id => document.getElementById(id);
+let activeHoldAssumptions = { holdTaxPct: 2.2, holdInsPct: 0.7, holdUtilPct: 0.6, holdHoaPct: 0.2, holdMaintPct: 0.9 };
+const ids = ['purchase','arv','rehabMode','rehabFlat','sqft','rehabPerSqft','holdMonths','holdMode','holdBase','monthlyHold','cashPurchase','useHardMoney75','downPct','interestPct','pointsPct','sellAgentPct','sellClosePct','contingencyPct','preset','hmPointsPct','hmDailyInterestDays','hmCreditReportFee','hmFloodCertFee','hmProcessingFee','hmCourierFee','hmWireFee','hmRecordingFee','hmDocPrepFee','hmTaxServiceFee','hmTaxCertFee','hmAssignLeaseFee','hmMudRecordingFee','hmTitlePct'];
+const WS_TO_CALC_MAP = {
+  wsPurchase: 'purchase',
+  wsArv: 'arv',
+  wsRehab: 'rehabFlat',
+  wsSqft: 'sqft',
+  wsHoldMonths: 'holdMonths',
+  wsInterestPct: 'interestPct',
+  wsContingencyPct: 'contingencyPct'
+};
+let syncingWorksheet = false;
 
-  const holdTot=hold*(val('taxMo')+val('insMo')+val('utilMo')+val('hoaMo')+val('maintMo'));
-  const agent=arv*(val('agentPct')/100), sellClose=arv*(val('sellClosePct')/100), conc=arv*(val('concPct')/100);
-  const sellTot=agent+sellClose+conc+val('marketing');
-  const cont=rehab*(val('contPct')/100);
+function n(id){const v=$(id).value; return v===''?0:Number(v)}
+function cur(v){return Number(v||0).toLocaleString('en-US',{style:'currency',currency:'USD',minimumFractionDigits:2,maximumFractionDigits:2})}
+function pct(v){return `${Number(v||0).toFixed(2)}%`}
+function setText(id,val){$(id).textContent=val}
 
-  const total=purchase+rehab+acq+holdTot+sellTot+cont;
-  const profit=arv-total; const profitPct=arv?(profit/arv*100):0;
-
-  // Offer ladder math: solve max offer at a target profit
-  const offerMultiplier = 1 + ltc*(pointsPct + rateFactor);
-  const fixedNoOffer = rehab + fixedAcq + holdTot + sellTot + cont;
-  const maxOfferFor = (profitGoal)=> (arv - fixedNoOffer - profitGoal) / (offerMultiplier||1);
-  const projProfitAtOffer = (offer)=> arv - (offer*offerMultiplier + fixedNoOffer);
-
-  const targetOffer=maxOfferFor(40000);
-  const stretchOffer=maxOfferFor(30000);
-  const walkOffer=maxOfferFor(25000);
-
-  // Wholesale floor net + needed sale price
-  const whFloor=Math.max(10000, arv*0.03);
-  const whSaleNeeded=total+whFloor;
-
-  set('loanAmt',fmt(loan)); set('pointsAmt',fmt(points)); set('interestAmt',fmt(interest));
-  ['uwFee','appraisal','drawFees','lenderMisc','titleBuy','recording','survey','marketing'].forEach(id=>set(id+'Amt',fmt(val(id))));
-  set('taxTot',fmt(hold*val('taxMo'))); set('insTot',fmt(hold*val('insMo'))); set('utilTot',fmt(hold*val('utilMo'))); set('hoaTot',fmt(hold*val('hoaMo'))); set('maintTot',fmt(hold*val('maintMo')));
-  set('agentAmt',fmt(agent)); set('sellCloseAmt',fmt(sellClose)); set('concAmt',fmt(conc));
-  set('acqTotal',fmt(acq)); set('holdTotal',fmt(holdTot)); set('sellTotal',fmt(sellTot)); set('contAmt',fmt(cont)); set('totalCosts',fmt(total)); set('profit',fmt(profit)); set('profitPct',profitPct.toFixed(1)+'%');
-
-  set('targetOffer',fmt(Math.max(0,targetOffer))+(ask?` (Ask: ${fmt(ask)})`:''));
-  set('stretchOffer',fmt(Math.max(0,stretchOffer))+(ask?` (Ask: ${fmt(ask)})`:''));
-  set('walkOffer',fmt(Math.max(0,walkOffer))+(ask?` (Ask: ${fmt(ask)})`:''));
-  set('targetProfit',fmt(projProfitAtOffer(Math.max(0,targetOffer))));
-  set('stretchProfit',fmt(projProfitAtOffer(Math.max(0,stretchOffer))));
-  set('walkProfit',fmt(projProfitAtOffer(Math.max(0,walkOffer))));
-
-  set('whFloor',fmt(whFloor));
-  set('whSaleNeeded',fmt(whSaleNeeded));
-
-  const copyText =
-`WORKSHEET 5 (Offer Ladder)
-Property Address: ______________________________
-ARV: ${fmt(arv)}
-Rehab: ${fmt(rehab)}
-Total Other Costs: ${fmt(total - purchase - rehab)}
-
-Target Offer: ${fmt(Math.max(0,targetOffer))}
-Projected Net Profit @ Target: ${fmt(projProfitAtOffer(Math.max(0,targetOffer)))}
-
-Stretch Offer: ${fmt(Math.max(0,stretchOffer))}
-Projected Net Profit @ Stretch: ${fmt(projProfitAtOffer(Math.max(0,stretchOffer)))}
-
-Walk-Away Offer: ${fmt(Math.max(0,walkOffer))}
-Projected Net Profit @ Walk-Away: ${fmt(projProfitAtOffer(Math.max(0,walkOffer)))}
-
------------------------------------------------
-WORKSHEET 7 (Exit)
-Initial List Price: ${fmt(arv)}
-Target DOM: 14 days
-Wholesale Floor Net: ${fmt(whFloor)}
-Wholesale Exit Sale Price Needed: ${fmt(whSaleNeeded)}
-Hard Rule: If no acceptable contract by day 30, execute backup within 72 hours.`;
-  document.getElementById('worksheetCopy').textContent = copyText;
-
-  let grade='PASS'; if(profit>=40000) grade='Tier A: Actionable now'; else if(profit>=25000) grade='Tier B: Negotiate aggressively';
-  document.getElementById('grade').textContent='Deal Grade: '+grade;
+function syncWorksheetToCalculator(){
+  if (syncingWorksheet) return;
+  syncingWorksheet = true;
+  Object.entries(WS_TO_CALC_MAP).forEach(([wsId, calcId]) => {
+    if ($(wsId) && $(calcId)) $(calcId).value = $(wsId).value;
+  });
+  syncingWorksheet = false;
+  calc();
 }
-document.querySelectorAll('input').forEach(i=>i.addEventListener('input',calc)); calc();
+
+function syncCalculatorToWorksheet(){
+  if (syncingWorksheet) return;
+  syncingWorksheet = true;
+  Object.entries(WS_TO_CALC_MAP).forEach(([wsId, calcId]) => {
+    if ($(wsId) && $(calcId)) $(wsId).value = $(calcId).value;
+  });
+  if ($('wsProjectedProfit') && $('oProfit')) $('wsProjectedProfit').value = $('oProfit').textContent;
+  syncingWorksheet = false;
+}
+
+function applyPreset(name){
+  const p = AREA_PRESETS[name] || AREA_PRESETS.default;
+  $('sellAgentPct').value = p.agentPct;
+  $('sellClosePct').value = p.sellerClosePct;
+  $('contingencyPct').value = p.contingencyPct;
+  $('monthlyHold').value = p.monthlyHold;
+  $('acqFees').value = p.acqFees;
+  $('buyerCloseFees').value = p.buyerCloseFees;
+  $('lenderFlatFees').value = p.lenderFlatFees;
+
+  // Optional lender-profile fields (used by Catalyst preset)
+  if (p.hmPointsPct != null) $('hmPointsPct').value = p.hmPointsPct;
+  if (p.hmDailyInterestDays != null) $('hmDailyInterestDays').value = p.hmDailyInterestDays;
+  if (p.hmCreditReportFee != null) $('hmCreditReportFee').value = p.hmCreditReportFee;
+  if (p.hmFloodCertFee != null) $('hmFloodCertFee').value = p.hmFloodCertFee;
+  if (p.hmProcessingFee != null) $('hmProcessingFee').value = p.hmProcessingFee;
+  if (p.hmCourierFee != null) $('hmCourierFee').value = p.hmCourierFee;
+  if (p.hmWireFee != null) $('hmWireFee').value = p.hmWireFee;
+  if (p.hmRecordingFee != null) $('hmRecordingFee').value = p.hmRecordingFee;
+  if (p.hmDocPrepFee != null) $('hmDocPrepFee').value = p.hmDocPrepFee;
+  if (p.hmTaxServiceFee != null) $('hmTaxServiceFee').value = p.hmTaxServiceFee;
+  if (p.hmTaxCertFee != null) $('hmTaxCertFee').value = p.hmTaxCertFee;
+  if (p.hmAssignLeaseFee != null) $('hmAssignLeaseFee').value = p.hmAssignLeaseFee;
+  if (p.hmMudRecordingFee != null) $('hmMudRecordingFee').value = p.hmMudRecordingFee;
+  if (p.hmTitlePct != null) $('hmTitlePct').value = p.hmTitlePct;
+
+  activeHoldAssumptions = {
+    holdTaxPct: p.holdTaxPct,
+    holdInsPct: p.holdInsPct,
+    holdUtilPct: p.holdUtilPct,
+    holdHoaPct: p.holdHoaPct,
+    holdMaintPct: p.holdMaintPct
+  };
+}
+
+function calc(){
+  const errors = [];
+  const warns = [];
+
+  const purchase = n('purchase');
+  const arv = n('arv');
+  const holdMonths = Math.max(1, Math.round(n('holdMonths')));
+  const cashPurchase = $('cashPurchase').checked;
+
+  if (purchase <= 0) errors.push('Purchase price must be > 0');
+  if (arv <= 0) errors.push('ARV must be > 0');
+
+  // Rehab mode
+  const rehabMode = $('rehabMode').value;
+  $('rehabFlatWrap').style.display = rehabMode === 'flat' ? '' : 'none';
+  $('rehabSqftWrap').style.display = rehabMode === 'perSqft' ? '' : 'none';
+  const rehabBase = rehabMode === 'flat' ? n('rehabFlat') : (n('sqft') * n('rehabPerSqft'));
+  const rehabCont = rehabBase * (n('contingencyPct')/100);
+  const repairContFlat = 0;
+  const rehabTotal = rehabBase + rehabCont + repairContFlat;
+
+  // Acquisition (buyer closing source depends on financing mode)
+  const acqFees = 0;
+  const acqBase = purchase + acqFees;
+
+  // Financing + hard-money 75% ARV down-payment logic
+  const downPct = Math.min(100, Math.max(0, n('downPct')));
+  const useHardMoney75 = $('useHardMoney75').checked && !cashPurchase;
+
+  const hmTotalAcq = purchase + rehabTotal;
+  const hmLenderMax = arv * 0.75;
+  const hmLoanable = Math.min(hmTotalAcq, hmLenderMax);
+  const hmBorrowerContribution = Math.max(0, hmTotalAcq - hmLoanable);
+  const hmPointsPct = n('hmPointsPct');
+  const hmDailyInterestDays = n('hmDailyInterestDays');
+  const hmCreditReportFee = n('hmCreditReportFee');
+  const hmFloodCertFee = n('hmFloodCertFee');
+  const hmProcessingFee = n('hmProcessingFee');
+  const hmCourierFee = n('hmCourierFee');
+  const hmWireFee = n('hmWireFee');
+  const hmRecordingFee = n('hmRecordingFee');
+  const hmDocPrepFee = n('hmDocPrepFee');
+  const hmTaxServiceFee = n('hmTaxServiceFee');
+  const hmTaxCertFee = n('hmTaxCertFee');
+  const hmAssignLeaseFee = n('hmAssignLeaseFee');
+  const hmMudRecordingFee = n('hmMudRecordingFee');
+  const hmTitlePct = n('hmTitlePct');
+
+  const hmPointsFee = hmLoanable * (hmPointsPct/100);
+  const hmDailyInterest = hmLoanable * (n('interestPct')/100) * (hmDailyInterestDays/365);
+  const hmFixedFees = hmCreditReportFee + hmFloodCertFee + hmProcessingFee + hmCourierFee + hmWireFee + hmRecordingFee + hmDocPrepFee + hmTaxServiceFee + hmTaxCertFee + hmAssignLeaseFee + hmMudRecordingFee;
+  const hmTitleClose = purchase * (hmTitlePct/100);
+  const hmLenderFees = hmPointsFee + hmDailyInterest + hmFixedFees;
+  const hmCashToClose = hmBorrowerContribution + hmLenderFees + hmTitleClose;
+
+  const closeFeesForProject = useHardMoney75 ? hmTitleClose : n('buyerCloseFees');
+  const acq = acqBase + closeFeesForProject;
+
+  // Keep original down % field visible, but show active/inactive status.
+  $('downPct').disabled = useHardMoney75;
+  $('downPct').style.opacity = useHardMoney75 ? '0.55' : '1';
+  $('downPctHelp').textContent = useHardMoney75
+    ? 'Inactive (overridden by hard-money 75% ARV logic).'
+    : 'Active when hard-money override is off.';
+
+  const loan = cashPurchase ? 0 : (useHardMoney75 ? hmLoanable : purchase * (1 - downPct/100));
+  const pointsBasisPct = useHardMoney75 ? hmPointsPct : n('pointsPct');
+  const flatLenderFees = useHardMoney75 ? hmFixedFees : n('lenderFlatFees');
+  const pointsFee = cashPurchase ? 0 : loan * (pointsBasisPct/100);
+  const interestHold = cashPurchase ? 0 : loan * (n('interestPct')/100) * (holdMonths/12);
+  const financingFees = useHardMoney75
+    ? (hmPointsFee + hmFixedFees + hmDailyInterest + interestHold)
+    : (pointsFee + flatLenderFees + interestHold);
+
+  // Holding (auto by typical % or manual monthly)
+  const holdMode = $('holdMode').value;
+  const holdBase = $('holdBase').value;
+  const holdBaseValue = holdBase === 'arv' ? arv : purchase;
+
+  const autoTaxMonthly = (holdBaseValue * (activeHoldAssumptions.holdTaxPct/100)) / 12;
+  const autoInsMonthly = (holdBaseValue * (activeHoldAssumptions.holdInsPct/100)) / 12;
+  const autoUtilMonthly = (holdBaseValue * (activeHoldAssumptions.holdUtilPct/100)) / 12;
+  const autoHoaMonthly = (holdBaseValue * (activeHoldAssumptions.holdHoaPct/100)) / 12;
+  const autoMaintMonthly = (holdBaseValue * (activeHoldAssumptions.holdMaintPct/100)) / 12;
+  const autoMonthlyHold = autoTaxMonthly + autoInsMonthly + autoUtilMonthly + autoHoaMonthly + autoMaintMonthly;
+
+  $('monthlyHoldWrap').style.display = holdMode === 'manual' ? '' : 'none';
+  $('autoHoldWrap').style.display = holdMode === 'auto' ? '' : 'none';
+  $('autoMonthlyHold').value = `${cur(autoMonthlyHold)} (Tax ${cur(autoTaxMonthly)} + Ins ${cur(autoInsMonthly)} + Util ${cur(autoUtilMonthly)} + HOA ${cur(autoHoaMonthly)} + Maint ${cur(autoMaintMonthly)})`;
+
+  let holdCost = (holdMode === 'auto' ? autoMonthlyHold : n('monthlyHold')) * holdMonths;
+  const holdOverrideOn = $('holdOverrideOn').checked;
+  if (holdOverrideOn) {
+    holdCost = n('holdOverride');
+    warns.push('Holding cost override is enabled; formula link is broken until restored.');
+  }
+
+  // Selling (formula or override)
+  let sellCost = arv * ((n('sellAgentPct') + n('sellClosePct'))/100);
+  const sellOverrideOn = $('sellOverrideOn').checked;
+  if (sellOverrideOn) {
+    sellCost = n('sellOverride');
+    warns.push('Selling cost override is enabled; formula link is broken until restored.');
+  }
+
+  const vacMarketing = n('vacMarketing');
+
+  const totalCost = acq + rehabTotal + holdCost + financingFees + sellCost + vacMarketing;
+  const netProfit = arv - totalCost;
+  const margin = arv ? (netProfit/arv)*100 : 0;
+
+  const loanPayoff = Math.min(arv * 0.75, purchase + rehabTotal);
+  const saleNet = arv - sellCost - loanPayoff;
+
+  const downCash = cashPurchase ? purchase : (useHardMoney75 ? hmBorrowerContribution : purchase*(downPct/100));
+  const closeFeesForCash = closeFeesForProject;
+  const lenderFeesForCash = useHardMoney75 ? hmLenderFees : (pointsFee + flatLenderFees);
+
+  // Cash invested logic:
+  // - Hard-money override: borrower contribution already captures the unfunded portion of purchase+rehab,
+  //   so DO NOT add full rehab again (prevents double-counting).
+  // - Standard financing: include rehab explicitly.
+  const cashInvested = useHardMoney75
+    ? (hmBorrowerContribution + n('acqFees') + hmTitleClose + hmLenderFees + holdCost + vacMarketing)
+    : (downCash + n('acqFees') + closeFeesForCash + rehabTotal + holdCost + lenderFeesForCash + vacMarketing);
+
+  let coc = cashInvested ? (netProfit/cashInvested)*100 : 0;
+  let cocLabel = 'Cash-on-cash return';
+  if (holdMonths > 12) {
+    coc = coc * (12/holdMonths);
+    cocLabel = 'Cash-on-cash return (annualized)';
+  }
+
+  const maxOffer70 = (arv * 0.70) - rehabTotal;
+
+  // Flags
+  if (netProfit <= 0) errors.push('Break-even warning: Net profit is zero or negative.');
+  if (purchase > maxOffer70) warns.push('Purchase price exceeds 70% rule suggested max offer.');
+
+  // Outputs
+  setText('kMaxOffer', cur(maxOffer70));
+  setText('kTotalCost', cur(totalCost));
+  setText('kProfit', cur(netProfit));
+  setText('kCoc', pct(coc));
+
+  setText('oAcq', cur(acq));
+  setText('oRehab', cur(rehabTotal));
+  setText('oFinFees', cur(financingFees));
+  setText('oSell', cur(sellCost));
+  setText('oHold', cur(holdCost));
+  setText('oTotal', cur(totalCost));
+  setText('oSaleNet', cur(saleNet));
+  setText('oProfit', cur(netProfit));
+  setText('oMargin', pct(margin));
+  setText('oCash', cur(cashInvested));
+  setText('oCoc', `${pct(coc)}${holdMonths>12?' (annualized)':''}`);
+
+  // Hard-money 75% ARV section outputs
+  setText('hmArv', cur(arv));
+  setText('hmPurchase', cur(purchase));
+  setText('hmRehab', cur(rehabTotal));
+  setText('hmTotalAcq', cur(hmTotalAcq));
+  setText('hmLenderMax', cur(hmLenderMax));
+  setText('hmLoanable', cur(hmLoanable));
+  setText('hmBorrower', cur(hmBorrowerContribution));
+  setText('hmLenderFees', cur(hmLenderFees));
+  setText('hmTitleFees', cur(hmTitleClose));
+  setText('hmCashToClose', cur(hmCashToClose));
+
+  $('hmSummary').textContent = hmLenderMax >= hmTotalAcq
+    ? 'Lender covers purchase + rehab under 75% ARV — borrower cash required = lender fees + closing costs.'
+    : 'Purchase + rehab exceed 75% ARV — borrower contributes the gap + lender fees + closing costs.';
+
+  // Alert area
+  const box = $('alerts');
+  let html = '';
+  if (errors.length) html += `<div class="alert bad"><strong>Action needed:</strong><br>${errors.map(x=>`• ${x}`).join('<br>')}</div>`;
+  if (warns.length) html += `<div class="alert warn"><strong>Warnings:</strong><br>${warns.map(x=>`• ${x}`).join('<br>')}</div>`;
+  if (!errors.length && !warns.length) html += `<div class="alert good"><strong>Status:</strong> Scenario looks internally consistent. Re-check ARV and rehab bids before offer.</div>`;
+  box.innerHTML = html;
+
+  syncCalculatorToWorksheet();
+
+  // stash for copy/csv
+  window.__deal = {
+    purchase, arv, rehabTotal, acq, holdCost, financingFees, sellCost, vacMarketing,
+    totalCost, netProfit, marginPct: margin, cashInvested, cocPct: coc, maxOffer70, holdMonths,
+    cocLabel, hmLoanable, hmBorrowerContribution, hmCashToClose
+  };
+}
+
+function resetDefaults(){
+  $('purchase').value = 0;
+  $('arv').value = 0;
+  $('rehabMode').value = 'flat';
+  $('rehabFlat').value = 0;
+  $('sqft').value = 1800;
+  $('rehabPerSqft').value = 25;
+  $('holdMonths').value = 6;
+  $('holdMode').value = 'auto';
+  $('holdBase').value = 'purchase';
+  $('monthlyHold').value = 900;
+  $('cashPurchase').checked = false;
+  $('useHardMoney75').checked = true;
+  $('downPct').value = 20;
+  $('interestPct').value = 12.99;
+  $('pointsPct').value = 2;
+  $('hmPointsPct').value = 2;
+  $('hmDailyInterestDays').value = 15;
+  $('hmCreditReportFee').value = 29;
+  $('hmFloodCertFee').value = 13;
+  $('hmProcessingFee').value = 1499;
+  $('hmCourierFee').value = 50;
+  $('hmWireFee').value = 25;
+  $('hmRecordingFee').value = 192;
+  $('hmDocPrepFee').value = 570;
+  $('hmTaxServiceFee').value = 99.95;
+  $('hmTaxCertFee').value = 75;
+  $('hmAssignLeaseFee').value = 41;
+  $('hmMudRecordingFee').value = 33;
+  $('hmTitlePct').value = 1.25;
+  $('vacMarketing').value = 0;
+  $('repairContFlat').value = 0;
+  $('holdOverride').value = '';
+  $('holdOverrideOn').checked = false;
+  $('sellOverride').value = '';
+  $('sellOverrideOn').checked = false;
+  $('preset').value = 'default';
+  applyPreset('default');
+  calc();
+}
+
+function loadSample(){
+  $('purchase').value = 180000;
+  $('arv').value = 295000;
+  $('rehabMode').value = 'flat';
+  $('rehabFlat').value = 38000;
+  $('holdMonths').value = 5;
+  $('holdMode').value = 'auto';
+  $('holdBase').value = 'purchase';
+  $('monthlyHold').value = 850;
+  $('cashPurchase').checked = false;
+  $('useHardMoney75').checked = true;
+  $('downPct').value = 20;
+  $('interestPct').value = 8.25;
+  $('pointsPct').value = 1.5;
+  $('hmPointsPct').value = 2;
+  $('hmDailyInterestDays').value = 15;
+  $('hmCreditReportFee').value = 29;
+  $('hmFloodCertFee').value = 13;
+  $('hmProcessingFee').value = 1499;
+  $('hmCourierFee').value = 50;
+  $('hmWireFee').value = 25;
+  $('hmRecordingFee').value = 192;
+  $('hmDocPrepFee').value = 570;
+  $('hmTaxServiceFee').value = 99.95;
+  $('hmTaxCertFee').value = 75;
+  $('hmAssignLeaseFee').value = 41;
+  $('hmMudRecordingFee').value = 33;
+  $('hmTitlePct').value = 1.25;
+  $('vacMarketing').value = 1000;
+  $('acqFees').value = 1400;
+  $('buyerCloseFees').value = 0;
+  $('lenderFlatFees').value = 0;
+  $('sellAgentPct').value = 6;
+  $('sellClosePct').value = 1;
+  $('contingencyPct').value = 10;
+  $('repairContFlat').value = 0;
+  $('holdOverrideOn').checked = false;
+  $('sellOverrideOn').checked = false;
+  calc();
+}
+
+function copySummary(){
+  calc();
+  const d = window.__deal || {};
+  const text = `Flip Deal Summary\nPurchase: ${cur(d.purchase)}\nARV: ${cur(d.arv)}\nTotal Cost: ${cur(d.totalCost)}\nNet Profit: ${cur(d.netProfit)}\nProfit Margin: ${pct(d.marginPct)}\nCash Invested: ${cur(d.cashInvested)}\n${d.cocLabel}: ${pct(d.cocPct)}\n70% Max Offer: ${cur(d.maxOffer70)}\nHM Loanable: ${cur(d.hmLoanable)}\nHM Borrower Contribution: ${cur(d.hmBorrowerContribution)}\nHM Cash-to-Close: ${cur(d.hmCashToClose)}`;
+  navigator.clipboard.writeText(text).then(()=>alert('Summary copied to clipboard.'));
+}
+
+function exportCsv(){
+  calc();
+  const d = window.__deal || {};
+  const rows = [
+    ['Metric','Value'],
+    ['Purchase',d.purchase],['ARV',d.arv],['Total Cost',d.totalCost],['Net Profit',d.netProfit],
+    ['Margin %',d.marginPct],['Cash Invested',d.cashInvested],['CoC %',d.cocPct],['70% Max Offer',d.maxOffer70],
+    ['HM Loanable',d.hmLoanable],['HM Borrower Contribution',d.hmBorrowerContribution],['HM Cash-to-Close',d.hmCashToClose]
+  ];
+  const csv = rows.map(r=>`"${r[0]}","${Number(r[1]||0).toFixed?Number(r[1]).toFixed(2):r[1]}"`).join('\n');
+  const blob = new Blob([csv],{type:'text/csv'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download='flip-deal-summary.csv'; a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+$('restoreHold').addEventListener('click',()=>{ $('holdOverrideOn').checked=false; $('holdOverride').value=''; calc(); });
+$('restoreSell').addEventListener('click',()=>{ $('sellOverrideOn').checked=false; $('sellOverride').value=''; calc(); });
+$('preset').addEventListener('change',e=>{ applyPreset(e.target.value); calc(); });
+$('resetDefaults').addEventListener('click', resetDefaults);
+$('loadSample').addEventListener('click', loadSample);
+$('copySummary').addEventListener('click', copySummary);
+$('exportCsv').addEventListener('click', exportCsv);
+ids.forEach(id => $(id).addEventListener('input', calc));
+Object.keys(WS_TO_CALC_MAP).forEach(id => $(id).addEventListener('input', syncWorksheetToCalculator));
+Object.values(WS_TO_CALC_MAP).forEach(id => $(id).addEventListener('input', syncCalculatorToWorksheet));
+
+resetDefaults();
 </script>
 </body>
 </html>
