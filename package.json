@@ -1,0 +1,11 @@
+{
+  "name": "jdhome-mentorship-site",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "node tests/worksheet-calculator.integration.test.js"
+  },
+  "devDependencies": {
+    "jsdom": "^26.0.0"
+  }
+}
