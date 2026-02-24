@@ -159,7 +159,6 @@
       <button id="loadSample">Load Sample Deal</button>
       <button class="alt" id="resetDefaults">Reset to Defaults</button>
       <button class="alt" id="copySummary">Copy Inputs + Results</button>
-      <button class="alt" id="exportCsv">Export Full CSV</button>
       <button class="alt" id="exportPdf">Export PDF Sheet</button>
     </div>
   </section>
@@ -317,7 +316,7 @@
       <tr><td>Title Fees (% of purchase)</td><td class="num" id="hmTitleFees">$0.00</td><td class="mono">purchase × title%</td></tr>
       <tr><td><strong>Total Cash-to-Close</strong></td><td class="num" id="hmCashToClose"><strong>$0.00</strong></td><td class="mono">borrower contribution + lender fees + title fees</td></tr>
     </table>
-  </section>`r`n</div>
+  </section></div>
 
 <script>
 /*
@@ -683,53 +682,58 @@ function copySummary(){
   navigator.clipboard.writeText(text).then(()=>alert('Summary copied to clipboard.'));
 }
 
-function exportCsv(){
-  calc();
-
-  const rows = [['Section','Field','Value']];
-
-  // Worksheet + calculator inputs
-  document.querySelectorAll('input, select').forEach(el => {
-    if (!el.id) return;
-    const label = document.querySelector(`label[for="${el.id}"]`)?.textContent?.trim() || el.id;
-    let value = '';
-    if (el.type === 'checkbox') value = el.checked ? 'Yes' : 'No';
-    else value = el.value;
-
-    let section = 'Calculator Inputs';
-    if (el.id.startsWith('ws')) section = 'Worksheet Inputs';
-    else if (el.id.startsWith('hm')) section = 'Hard Money Inputs';
-
-    rows.push([section, label, value]);
-  });
-
-  // Results table
-  document.querySelectorAll('.out tr').forEach((tr, idx) => {
-    if (idx === 0) return;
-    const tds = tr.querySelectorAll('td');
-    if (tds.length >= 2) {
-      const field = tds[0].innerText.trim().replace(/\s+/g,' ');
-      const value = tds[1].innerText.trim();
-      rows.push(['Calculated Results', field, value]);
-    }
-  });
-
-  const esc = (v) => `"${String(v ?? '').replaceAll('"','""')}"`;
-  const csv = rows.map(r => r.map(esc).join(',')).join('\n');
-  const blob = new Blob([csv], { type:'text/csv' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'flip-deal-full-export.csv';
-  a.click();
-  URL.revokeObjectURL(a.href);
-}
-
 function exportPdf(){
   calc();
-  const printable = document.documentElement.outerHTML;
+
+  const collectSectionRows = (title, ids) => {
+    const rows = ids.map((id) => {
+      const el = $(id);
+      if (!el) return '';
+      const label = document.querySelector(`label[for="${id}"]`)?.textContent?.trim() || id;
+      const value = el.type === 'checkbox' ? (el.checked ? 'Yes' : 'No') : el.value;
+      return `<tr><td>${label}</td><td>${value}</td></tr>`;
+    }).join('');
+    return `<section><h3>${title}</h3><table><tr><th>Field</th><th>Value</th></tr>${rows}</table></section>`;
+  };
+
+  const summaryRows = Array.from(document.querySelectorAll('.out tr')).slice(1).map((tr) => {
+    const tds = tr.querySelectorAll('td');
+    if (tds.length < 2) return '';
+    return `<tr><td>${tds[0].innerText.trim()}</td><td>${tds[1].innerText.trim()}</td></tr>`;
+  }).join('');
+
+  const html = `<!doctype html>
+  <html><head><meta charset="utf-8"><title>Flip Deal Report</title>
+  <style>
+    body{font-family:Inter,Arial,sans-serif;margin:24px;color:#0f172a}
+    h1{margin:0 0 4px;font-size:24px} .muted{color:#475569;margin-bottom:16px}
+    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0 18px}
+    .kpi{border:1px solid #cbd5e1;border-radius:10px;padding:10px;background:#f8fafc}
+    .kpi .k{font-size:12px;color:#64748b}.kpi .v{font-size:18px;font-weight:700}
+    section{margin:14px 0 18px} h3{margin:0 0 8px;font-size:15px}
+    table{width:100%;border-collapse:collapse} th,td{border:1px solid #cbd5e1;padding:7px 8px;text-align:left;font-size:12px}
+    th{background:#eef2ff} .footer{margin-top:14px;font-size:11px;color:#64748b}
+    @media print { body{margin:10mm} }
+  </style></head><body>
+  <h1>Flip Deal Report</h1>
+  <div class="muted">Generated: ${new Date().toLocaleString()}</div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">70% Rule Max Offer</div><div class="v">${$('kMaxOffer').textContent}</div></div>
+    <div class="kpi"><div class="k">Total Project Cost</div><div class="v">${$('kTotalCost').textContent}</div></div>
+    <div class="kpi"><div class="k">Net Profit</div><div class="v">${$('kProfit').textContent}</div></div>
+    <div class="kpi"><div class="k">Cash-on-Cash Return</div><div class="v">${$('kCoc').textContent}</div></div>
+  </div>
+  ${collectSectionRows('Worksheet Inputs', ['wsAddress','wsZip','wsSqft','wsArv','wsPurchase'])}
+  ${collectSectionRows('Core Inputs', ['purchase','arv','rehabMode','rehabFlat','sqft','rehabPerSqft','holdMonths','holdMode','holdBase','monthlyHold','cashPurchase','useHardMoney75','downPct','interestPct','pointsPct','sellAgentPct','sellClosePct','contingencyPct'])}
+  ${collectSectionRows('Advanced Inputs', ['acqFees','buyerCloseFees','lenderFlatFees','vacMarketing','repairContFlat','holdOverride','holdOverrideOn','sellOverride','sellOverrideOn'])}
+  ${collectSectionRows('Hard Money Inputs', ['hmPointsPct','hmDailyInterestDays','hmCreditReportFee','hmFloodCertFee','hmProcessingFee','hmCourierFee','hmWireFee','hmRecordingFee','hmDocPrepFee','hmTaxServiceFee','hmTaxCertFee','hmAssignLeaseFee','hmMudRecordingFee','hmTitlePct'])}
+  <section><h3>Calculated Results</h3><table><tr><th>Metric</th><th>Value</th></tr>${summaryRows}</table></section>
+  <div class="footer">Prepared from JD Home Mentorship Calculator</div>
+  </body></html>`;
+
   const w = window.open('', '_blank');
   w.document.open();
-  w.document.write(printable);
+  w.document.write(html);
   w.document.close();
   w.focus();
   setTimeout(() => w.print(), 350);
@@ -741,7 +745,6 @@ $('preset').addEventListener('change',e=>{ applyPreset(e.target.value); calc(); 
 $('resetDefaults').addEventListener('click', resetDefaults);
 $('loadSample').addEventListener('click', loadSample);
 $('copySummary').addEventListener('click', copySummary);
-$('exportCsv').addEventListener('click', exportCsv);
 $('exportPdf').addEventListener('click', exportPdf);
 ids.forEach(id => $(id).addEventListener('input', calc));
 Object.keys(WS_TO_CALC_MAP).forEach(id => $(id).addEventListener('input', syncWorksheetToCalculator));
@@ -751,5 +754,6 @@ resetDefaults();
 </script>
 </body>
 </html>
+
 
 
