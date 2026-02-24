@@ -677,6 +677,9 @@ function loadSample(){
 function exportPdf(){
   calc();
 
+  const money = (id) => ($(id)?.value !== undefined ? cur(Number($(id).value || 0)) : ($(id)?.textContent || 'function exportPdf(){
+  calc();
+
   const collectSectionRows = (title, ids) => {
     const rows = ids.map((id) => {
       const el = $(id);
@@ -731,6 +734,77 @@ function exportPdf(){
   w.document.close();
   w.focus();
   setTimeout(() => w.print(), 350);
+}.00'));
+  const num = (id) => Number($(id)?.value || 0);
+  const txt = (id) => ($(id)?.value ?? '').toString().trim();
+
+  const address = txt('wsAddress') || '—';
+  const zip = txt('wsZip') || '—';
+  const sqft = num('sqft') || num('wsSqft') || 0;
+
+  const html = `<!doctype html>
+  <html><head><meta charset="utf-8"><title>Flip Deal Worksheet Summary</title>
+  <style>
+    body{font-family:Inter,Arial,sans-serif;margin:22px;color:#0f172a}
+    h1{margin:0 0 2px;font-size:24px}
+    .muted{color:#475569;font-size:12px;margin-bottom:14px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .card{border:1px solid #cbd5e1;border-radius:10px;padding:10px;background:#f8fafc}
+    .k{font-size:11px;color:#64748b}.v{font-size:18px;font-weight:700}
+    h3{margin:14px 0 6px;font-size:14px}
+    table{width:100%;border-collapse:collapse}
+    th,td{border:1px solid #cbd5e1;padding:7px 8px;text-align:left;font-size:12px}
+    th{background:#eef2ff}
+    .footer{margin-top:12px;font-size:11px;color:#64748b}
+    @media print{body{margin:8mm}}
+  </style></head><body>
+  <h1>Flip Deal Worksheet Summary</h1>
+  <div class="muted">Generated: ${new Date().toLocaleString()}</div>
+
+  <h3>Property Snapshot</h3>
+  <table>
+    <tr><th>Address</th><td>${address}</td><th>ZIP</th><td>${zip}</td></tr>
+    <tr><th>Sqft</th><td>${sqft ? sqft.toLocaleString() : '—'}</td><th>Preset</th><td>${$('preset').value}</td></tr>
+  </table>
+
+  <h3>Main Deal Numbers</h3>
+  <div class="grid">
+    <div class="card"><div class="k">Purchase Price</div><div class="v">${money('purchase')}</div></div>
+    <div class="card"><div class="k">ARV</div><div class="v">${money('arv')}</div></div>
+    <div class="card"><div class="k">Estimated Rehab</div><div class="v">${money('rehabFlat')}</div></div>
+    <div class="card"><div class="k">Projected Profit</div><div class="v">${$('oProfit').textContent}</div></div>
+  </div>
+
+  <h3>Offer + Return Summary</h3>
+  <table>
+    <tr><th>70% Rule Max Offer</th><td>${$('kMaxOffer').textContent}</td><th>Total Project Cost</th><td>${$('kTotalCost').textContent}</td></tr>
+    <tr><th>Net Profit</th><td>${$('kProfit').textContent}</td><th>Cash-on-Cash Return</th><td>${$('kCoc').textContent}</td></tr>
+    <tr><th>Projected Sale Proceeds</th><td>${$('oSaleNet').textContent}</td><th>Profit Margin</th><td>${$('oMargin').textContent}</td></tr>
+  </table>
+
+  <h3>Key Assumptions</h3>
+  <table>
+    <tr><th>Holding Time</th><td>${num('holdMonths')} months</td><th>Interest Rate</th><td>${num('interestPct').toFixed(2)}%</td></tr>
+    <tr><th>Loan Points</th><td>${num('pointsPct').toFixed(2)}%</td><th>Rehab Contingency</th><td>${num('contingencyPct').toFixed(2)}%</td></tr>
+    <tr><th>Agent Commission</th><td>${num('sellAgentPct').toFixed(2)}%</td><th>Seller Closing</th><td>${num('sellClosePct').toFixed(2)}%</td></tr>
+  </table>
+
+  <h3>Cost Breakdown (Summary)</h3>
+  <table>
+    <tr><th>Acquisition</th><td>${$('oAcq').textContent}</td><th>Rehab</th><td>${$('oRehab').textContent}</td></tr>
+    <tr><th>Financing</th><td>${$('oFinFees').textContent}</td><th>Holding</th><td>${$('oHold').textContent}</td></tr>
+    <tr><th>Selling</th><td>${$('oSell').textContent}</td><th>Cash Invested</th><td>${$('oCash').textContent}</td></tr>
+  </table>
+
+  <div class="footer">Prepared from JD Home Mentorship Calculator</div>
+  </body></html>`;
+
+  const w = window.open('', '_blank');
+  w.document.open();
+  w.document.write(html);
+  w.document.close();
+  w.focus();
+  setTimeout(() => w.print(), 350);
 }
 
 $('restoreHold').addEventListener('click',()=>{ $('holdOverrideOn').checked=false; $('holdOverride').value=''; calc(); });
@@ -747,6 +821,7 @@ resetDefaults();
 </script>
 </body>
 </html>
+
 
 
 
