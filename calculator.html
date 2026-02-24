@@ -159,7 +159,8 @@
       <button id="loadSample">Load Sample Deal</button>
       <button class="alt" id="resetDefaults">Reset to Defaults</button>
       <button class="alt" id="copySummary">Copy Inputs + Results</button>
-      <button class="alt" id="exportCsv">Export CSV</button>
+      <button class="alt" id="exportCsv">Export Full CSV</button>
+      <button class="alt" id="exportPdf">Export PDF Sheet</button>
     </div>
   </section>
 
@@ -684,17 +685,54 @@ function copySummary(){
 
 function exportCsv(){
   calc();
-  const d = window.__deal || {};
-  const rows = [
-    ['Metric','Value'],
-    ['Purchase',d.purchase],['ARV',d.arv],['Total Cost',d.totalCost],['Net Profit',d.netProfit],
-    ['Margin %',d.marginPct],['Cash Invested',d.cashInvested],['CoC %',d.cocPct],['70% Max Offer',d.maxOffer70],
-    ['HM Loanable',d.hmLoanable],['HM Borrower Contribution',d.hmBorrowerContribution],['HM Cash-to-Close',d.hmCashToClose]
-  ];
-  const csv = rows.map(r=>`"${r[0]}","${Number(r[1]||0).toFixed?Number(r[1]).toFixed(2):r[1]}"`).join('\n');
-  const blob = new Blob([csv],{type:'text/csv'});
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download='flip-deal-summary.csv'; a.click();
+
+  const rows = [['Section','Field','Value']];
+
+  // Worksheet + calculator inputs
+  document.querySelectorAll('input, select').forEach(el => {
+    if (!el.id) return;
+    const label = document.querySelector(`label[for="${el.id}"]`)?.textContent?.trim() || el.id;
+    let value = '';
+    if (el.type === 'checkbox') value = el.checked ? 'Yes' : 'No';
+    else value = el.value;
+
+    let section = 'Calculator Inputs';
+    if (el.id.startsWith('ws')) section = 'Worksheet Inputs';
+    else if (el.id.startsWith('hm')) section = 'Hard Money Inputs';
+
+    rows.push([section, label, value]);
+  });
+
+  // Results table
+  document.querySelectorAll('.out tr').forEach((tr, idx) => {
+    if (idx === 0) return;
+    const tds = tr.querySelectorAll('td');
+    if (tds.length >= 2) {
+      const field = tds[0].innerText.trim().replace(/\s+/g,' ');
+      const value = tds[1].innerText.trim();
+      rows.push(['Calculated Results', field, value]);
+    }
+  });
+
+  const esc = (v) => `"${String(v ?? '').replaceAll('"','""')}"`;
+  const csv = rows.map(r => r.map(esc).join(',')).join('\n');
+  const blob = new Blob([csv], { type:'text/csv' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'flip-deal-full-export.csv';
+  a.click();
   URL.revokeObjectURL(a.href);
+}
+
+function exportPdf(){
+  calc();
+  const printable = document.documentElement.outerHTML;
+  const w = window.open('', '_blank');
+  w.document.open();
+  w.document.write(printable);
+  w.document.close();
+  w.focus();
+  setTimeout(() => w.print(), 350);
 }
 
 $('restoreHold').addEventListener('click',()=>{ $('holdOverrideOn').checked=false; $('holdOverride').value=''; calc(); });
@@ -704,6 +742,7 @@ $('resetDefaults').addEventListener('click', resetDefaults);
 $('loadSample').addEventListener('click', loadSample);
 $('copySummary').addEventListener('click', copySummary);
 $('exportCsv').addEventListener('click', exportCsv);
+$('exportPdf').addEventListener('click', exportPdf);
 ids.forEach(id => $(id).addEventListener('input', calc));
 Object.keys(WS_TO_CALC_MAP).forEach(id => $(id).addEventListener('input', syncWorksheetToCalculator));
 Object.values(WS_TO_CALC_MAP).forEach(id => $(id).addEventListener('input', syncCalculatorToWorksheet));
