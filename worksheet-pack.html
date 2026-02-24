@@ -7,7 +7,7 @@
   <style>
     :root{
       --navy:#0b1020;
-      --gold:#7dd3fc;
+      --gold:#8b9cff;
       --cream:#070911;
       --ink:#e6f0ff;
       --muted:#9bb0d3;
@@ -24,27 +24,27 @@
     .cover{background:linear-gradient(135deg,var(--navy),#1f3f66);color:#fff;border:1px solid rgba(255,255,255,.2)}
     .kicker{display:inline-block;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);padding:6px 10px;border-radius:999px;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
     h1{font-family:Georgia,"Times New Roman",serif;font-size:34px;letter-spacing:.2px;margin:10px 0 8px}
-    h2{font-family:Georgia,"Times New Roman",serif;font-size:25px;margin:0 0 8px;color:#f5d9a0}
+    h2{font-family:Georgia,"Times New Roman",serif;font-size:25px;margin:0 0 8px;color:#cdd8ff}
     h3{font-size:15px;margin:12px 0 8px;text-transform:uppercase;letter-spacing:.04em;color:#d5e0f0}
     p{margin:6px 0}
     .small{font-size:12px;color:var(--muted)}
-    .ribbon{height:6px;background:linear-gradient(90deg,var(--gold),#e7c98f);border-radius:999px;margin:0 0 14px}
+    .ribbon{height:6px;background:linear-gradient(90deg,var(--gold),#7dd3fc);border-radius:999px;margin:0 0 14px}
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
     .box{border:1px solid var(--line);background:var(--soft);border-radius:10px;padding:10px}
     .line{border-bottom:1px solid rgba(255,255,255,.35);height:24px}
     .line.tall{height:34px}
     .line.xl{height:44px}
-    .guide{border-left:4px solid var(--gold);background:rgba(202,163,90,.16);padding:10px 12px;border-radius:8px;margin:10px 0;font-size:12px;color:#f1e5cb}
+    .guide{border-left:4px solid var(--gold);background:rgba(125,211,252,.14);padding:10px 12px;border-radius:8px;margin:10px 0;font-size:12px;color:#dbe9ff}
     .check{padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.03)}
     .check ul{margin:0;padding:0;list-style:none}
     .check li{margin:6px 0}
-    .check li::before{content:"☐ ";font-weight:700;color:#f0d59e}
+    .check li::before{content:"☐ ";font-weight:700;color:#9cc6ff}
     table{width:100%;border-collapse:collapse;margin-top:8px}
     th,td{border:1px solid var(--line);padding:8px;text-align:left;vertical-align:top;font-size:13px}
     table.roomy td{height:34px}
     table.super-roomy td{height:52px}
-    th{background:rgba(255,255,255,.06);color:#f0dcc0}
-    .formula{border:1px solid rgba(202,163,90,.6);background:rgba(202,163,90,.15);border-radius:8px;padding:10px;font-weight:700;color:#f6ecd7}
+    th{background:rgba(255,255,255,.06);color:#cdd8ff}
+    .formula{border:1px solid rgba(125,211,252,.45);background:rgba(125,211,252,.12);border-radius:8px;padding:10px;font-weight:700;color:#dbe9ff}
     .num{font-family:Consolas,Monaco,monospace}
     .page-note{margin-top:8px;color:#b9c7db;font-size:12px}
     @media (max-width:760px){.grid2{grid-template-columns:1fr}}
@@ -78,25 +78,8 @@
 <body>
 <div class="wrap">
 
-  <p style="margin:4px 0 10px;"><a href="./index.html" style="color:#f0d59e;text-decoration:none;border:1px solid rgba(202,163,90,.4);padding:6px 10px;border-radius:999px;display:inline-block;">← Back to Dashboard</a></p>
-  <p style="margin:0 0 12px;"><a href="./calculator.html" style="color:#e6f0ff;text-decoration:none;border:1px solid rgba(125,211,252,.5);padding:8px 12px;border-radius:10px;display:inline-block;background:rgba(125,211,252,.12);">Use integrated Worksheet + Calculator (live sync)</a></p>
-
-  <section class="sheet">
-    <div class="ribbon"></div>
-    <h2>Auto-Filled Deal Snapshot (from Calculator)</h2>
-    <p class="small">Values pull from your most recent calculator entry.</p>
-    <table>
-      <tr><th>Property Address</th><td id="afAddress">—</td><th>ZIP</th><td id="afZip">—</td></tr>
-      <tr><th>Sqft</th><td id="afSqft">—</td><th>Purchase</th><td id="afPurchase">—</td></tr>
-      <tr><th>ARV</th><td id="afArv">—</td><th>Est. Rehab</th><td id="afRehab">—</td></tr>
-      <tr><th>Hold (months)</th><td id="afHoldMonths">—</td><th>Interest Rate</th><td id="afInterest">—</td></tr>
-      <tr><th>Contingency</th><td id="afContingency">—</td><th>Projected Profit</th><td id="afProfit">—</td></tr>
-      <tr><th>Total Project Cost</th><td id="afTotalCost">—</td><th>70% Max Offer</th><td id="afMaxOffer">—</td></tr>
-    </table>
-    <p class="small">Last synced: <span id="afUpdated">—</span></p>
-  </section>
-
-  <section class="sheet cover">
+  <p style="margin:4px 0 10px;"><a href="./index.html" style="color:#cdd8ff;text-decoration:none;border:1px solid rgba(125,211,252,.45);padding:6px 10px;border-radius:999px;display:inline-block;background:rgba(125,211,252,.1);">← Back to Dashboard</a></p>
+  <p style="margin:0 0 12px;"><a href="./calculator.html" style="color:#e6f0ff;text-decoration:none;border:1px solid rgba(125,211,252,.5);padding:8px 12px;border-radius:10px;display:inline-block;background:rgba(125,211,252,.12);">Use integrated Worksheet + Calculator (live sync)</a></p>`r`n<section class="sheet cover">
     <span class="kicker">Premium Investor Toolkit</span>
     <h1>House Flipping Worksheet Pack</h1>
     <p>Action-first workbook for serious deal execution.</p>
@@ -341,19 +324,19 @@
     if (!raw) return;
     const d = JSON.parse(raw);
 
-    fill('afAddress', d.address || '—');
-    fill('afZip', d.zip || '—');
-    fill('afSqft', d.sqft ? Number(d.sqft).toLocaleString() : '—');
-    fill('afPurchase', d.purchase ? fmtMoney(d.purchase) : '—');
-    fill('afArv', d.arv ? fmtMoney(d.arv) : '—');
-    fill('afRehab', d.rehab ? fmtMoney(d.rehab) : '—');
-    fill('afHoldMonths', d.holdMonths ? `${d.holdMonths} months` : '—');
-    fill('afInterest', d.interestPct ? `${Number(d.interestPct).toFixed(2)}%` : '—');
-    fill('afContingency', d.contingencyPct ? `${Number(d.contingencyPct).toFixed(2)}%` : '—');
-    fill('afProfit', d.profit || '—');
-    fill('afTotalCost', d.totalCost || '—');
-    fill('afMaxOffer', d.maxOffer || '—');
-    fill('afUpdated', d.generatedAt ? new Date(d.generatedAt).toLocaleString() : '—');
+    // Autofill key worksheet lines throughout the pack
+    fill('wfPropertyAddress', d.address || '____________________________________________');
+    fill('wfPropertyShort', d.address || '______________________');
+    fill('wfZip', d.zip || '__________________________');
+    fill('wfSqft', d.sqft ? Number(d.sqft).toLocaleString() : '__________________________');
+    fill('wfArv', d.arv ? fmtMoney(d.arv) : '$________');
+    fill('wfRehab', d.rehab ? fmtMoney(d.rehab) : '$________');
+
+    const purchase = Number(d.purchase || 0);
+    const rehab = Number(d.rehab || 0);
+    const totalCostNum = Number(String(d.totalCost || '').replace(/[^0-9.-]/g,''));
+    const otherCosts = totalCostNum && purchase && rehab ? (totalCostNum - purchase - rehab) : 0;
+    fill('wfOtherCosts', otherCosts ? fmtMoney(otherCosts) : '$________');
   } catch(e) {
     console.warn('Auto-fill load failed', e);
   }
@@ -361,3 +344,5 @@
 </script>
 </body>
 </html>
+
+
