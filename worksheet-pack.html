@@ -16,7 +16,9 @@
       --soft:rgba(30,41,59,.66);
     }
     *{box-sizing:border-box}
-    body{margin:0;background:radial-gradient(1100px 420px at 90% -20%,rgba(167,139,250,.18),transparent 60%),radial-gradient(900px 520px at -10% 0%,rgba(125,211,252,.12),transparent 62%),var(--cream);color:var(--ink);font-family:Inter,"Segoe UI",Arial,sans-serif;line-height:1.45}
+    body{margin:0;position:relative;background:linear-gradient(140deg,#06080f 0%,#0b1020 46%,#090d1a 100%);color:var(--ink);font-family:Inter,"Segoe UI",Arial,sans-serif;line-height:1.45;overflow-x:hidden}
+    body::before{content:"";position:fixed;inset:-40px;z-index:-2;background:radial-gradient(1100px 560px at 85% -10%, rgba(167,139,250,.28), transparent 58%),radial-gradient(900px 520px at -10% 0%, rgba(125,211,252,.20), transparent 62%),linear-gradient(120deg, rgba(99,102,241,.14), rgba(56,189,248,.10), rgba(236,72,153,.10)),url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=2200&q=80');background-size:cover;background-position:center;background-repeat:no-repeat;filter: blur(18px) saturate(112%);transform:scale(1.08)}
+    body::after{content:"";position:fixed;inset:0;z-index:-1;background:rgba(6,10,20,.35)}
     .wrap{max-width:920px;margin:20px auto;padding:0 14px}
     .sheet{background:linear-gradient(160deg,rgba(255,255,255,.03),rgba(255,255,255,.01));border:1px solid var(--line);border-radius:14px;padding:22px;margin:16px 0;box-shadow:0 10px 24px rgba(0,0,0,.25);break-inside:avoid}
     .cover{background:linear-gradient(135deg,var(--navy),#1f3f66);color:#fff;border:1px solid rgba(255,255,255,.2)}

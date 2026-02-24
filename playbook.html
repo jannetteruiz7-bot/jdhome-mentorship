@@ -6,27 +6,29 @@
   <title>No-Fluff House Flipping Manual (Modern Beginner Edition)</title>
   <style>
     :root{
-      --bg:#f6f7fb;
-      --card:#ffffff;
-      --ink:#1e2430;
-      --muted:#5c6475;
-      --brand:#6c63ff;
-      --brand2:#00bfa6;
-      --accent:#ff5ca8;
-      --line:#e8ebf3;
-      --ok:#e8f8f4;
-      --warn:#fff1f1;
-      --tip:#eef3ff;
+      --bg:#070911;
+      --card:rgba(17,24,39,.72);
+      --ink:#e6f0ff;
+      --muted:#9bb0d3;
+      --brand:#7dd3fc;
+      --brand2:#65c2ff;
+      --accent:#a78bfa;
+      --line:rgba(148,163,184,.28);
+      --ok:rgba(19,63,49,.45);
+      --warn:rgba(79,29,41,.45);
+      --tip:rgba(30,41,59,.6);
     }
     *{box-sizing:border-box}
-    body{font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--ink);margin:0;line-height:1.5}
+    body{font-family:Inter,Segoe UI,Arial,sans-serif;background:linear-gradient(140deg,#06080f 0%,#0b1020 46%,#090d1a 100%);color:var(--ink);margin:0;line-height:1.5;position:relative;overflow-x:hidden}
+    body::before{content:"";position:fixed;inset:-40px;z-index:-2;background:radial-gradient(1100px 560px at 85% -10%, rgba(167,139,250,.28), transparent 58%),radial-gradient(900px 520px at -10% 0%, rgba(125,211,252,.20), transparent 62%),linear-gradient(120deg, rgba(99,102,241,.14), rgba(56,189,248,.10), rgba(236,72,153,.10)),url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=2200&q=80');background-size:cover;background-position:center;background-repeat:no-repeat;filter: blur(18px) saturate(112%);transform:scale(1.08)}
+    body::after{content:"";position:fixed;inset:0;z-index:-1;background:rgba(6,10,20,.35)}
     .wrap{max-width:920px;margin:24px auto;padding:0 18px}
     .cover{background:linear-gradient(135deg,#fff,#f1efff);border:1px solid var(--line);border-radius:20px;padding:32px;box-shadow:0 10px 30px rgba(20,25,40,.06)}
     h1{margin:0 0 8px;font-size:36px;letter-spacing:-.02em}
     .sub{font-size:18px;color:var(--muted);margin-bottom:10px}
     .badge{display:inline-block;background:var(--brand);color:#fff;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700;letter-spacing:.04em}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin:14px 0}
+    .card{background:linear-gradient(160deg,var(--card),rgba(30,41,59,.66));border:1px solid var(--line);border-radius:14px;padding:18px;margin:14px 0;backdrop-filter: blur(8px)}
     h2{margin:0 0 10px;font-size:24px}
     h3{margin:12px 0 8px;font-size:18px}
     p{margin:8px 0}

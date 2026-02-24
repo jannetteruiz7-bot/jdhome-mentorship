@@ -20,10 +20,32 @@
       margin:0;
       font-family:Inter,Segoe UI,Arial,sans-serif;
       color:var(--text);
+      position:relative;
+      background:linear-gradient(140deg,#06080f 0%,#0b1020 46%,#090d1a 100%);
+      overflow-x:hidden;
+    }
+    body::before{
+      content:"";
+      position:fixed;
+      inset:-40px;
+      z-index:-2;
       background:
-        radial-gradient(1200px 500px at 80% -20%, rgba(202,163,90,.20), transparent 60%),
-        radial-gradient(900px 400px at -10% -10%, rgba(90,130,180,.16), transparent 60%),
-        var(--bg);
+        radial-gradient(1100px 560px at 85% -10%, rgba(167,139,250,.28), transparent 58%),
+        radial-gradient(900px 520px at -10% 0%, rgba(125,211,252,.20), transparent 62%),
+        linear-gradient(120deg, rgba(99,102,241,.14), rgba(56,189,248,.10), rgba(236,72,153,.10)),
+        url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=2200&q=80');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      filter: blur(18px) saturate(112%);
+      transform: scale(1.08);
+    }
+    body::after{
+      content:"";
+      position:fixed;
+      inset:0;
+      z-index:-1;
+      background:rgba(6,10,20,.35);
     }
     .wrap{max-width:1120px;margin:0 auto;padding:28px 18px 36px}
     .nav{

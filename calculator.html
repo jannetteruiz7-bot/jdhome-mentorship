@@ -347,7 +347,7 @@ const AREA_PRESETS = {
 
 const $ = id => document.getElementById(id);
 let activeHoldAssumptions = { holdTaxPct: 2.2, holdInsPct: 0.7, holdUtilPct: 0.6, holdHoaPct: 0.2, holdMaintPct: 0.9 };
-const ids = ['purchase','arv','rehabMode','rehabFlat','sqft','rehabPerSqft','holdMonths','holdMode','holdBase','monthlyHold','cashPurchase','useHardMoney75','downPct','interestPct','pointsPct','sellAgentPct','sellClosePct','contingencyPct','preset','hmPointsPct','hmDailyInterestDays','hmCreditReportFee','hmFloodCertFee','hmProcessingFee','hmCourierFee','hmWireFee','hmRecordingFee','hmDocPrepFee','hmTaxServiceFee','hmTaxCertFee','hmAssignLeaseFee','hmMudRecordingFee','hmTitlePct'];
+const ids = ['purchase','arv','rehabMode','rehabFlat','sqft','rehabPerSqft','holdMonths','holdMode','holdBase','monthlyHold','cashPurchase','useHardMoney75','downPct','interestPct','pointsPct','sellAgentPct','sellClosePct','contingencyPct','acqFees','buyerCloseFees','lenderFlatFees','vacMarketing','repairContFlat','holdOverride','holdOverrideOn','sellOverride','sellOverrideOn','preset','hmPointsPct','hmDailyInterestDays','hmCreditReportFee','hmFloodCertFee','hmProcessingFee','hmCourierFee','hmWireFee','hmRecordingFee','hmDocPrepFee','hmTaxServiceFee','hmTaxCertFee','hmAssignLeaseFee','hmMudRecordingFee','hmTitlePct'];
 const WS_TO_CALC_MAP = {
   wsPurchase: 'purchase',
   wsArv: 'arv',
@@ -437,11 +437,11 @@ function calc(){
   $('rehabSqftWrap').style.display = rehabMode === 'perSqft' ? '' : 'none';
   const rehabBase = rehabMode === 'flat' ? n('rehabFlat') : (n('sqft') * n('rehabPerSqft'));
   const rehabCont = rehabBase * (n('contingencyPct')/100);
-  const repairContFlat = 0;
+  const repairContFlat = n('repairContFlat');
   const rehabTotal = rehabBase + rehabCont + repairContFlat;
 
   // Acquisition (buyer closing source depends on financing mode)
-  const acqFees = 0;
+  const acqFees = n('acqFees');
   const acqBase = purchase + acqFees;
 
   // Financing + hard-money 75% ARV down-payment logic
@@ -542,8 +542,8 @@ function calc(){
   //   so DO NOT add full rehab again (prevents double-counting).
   // - Standard financing: include rehab explicitly.
   const cashInvested = useHardMoney75
-    ? (hmBorrowerContribution + n('acqFees') + hmTitleClose + hmLenderFees + holdCost + vacMarketing)
-    : (downCash + n('acqFees') + closeFeesForCash + rehabTotal + holdCost + lenderFeesForCash + vacMarketing);
+    ? (hmBorrowerContribution + acqFees + hmTitleClose + hmLenderFees + holdCost + vacMarketing)
+    : (downCash + acqFees + closeFeesForCash + rehabTotal + holdCost + lenderFeesForCash + vacMarketing);
 
   let coc = cashInvested ? (netProfit/cashInvested)*100 : 0;
   let cocLabel = 'Cash-on-cash return';
