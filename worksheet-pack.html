@@ -81,6 +81,21 @@
   <p style="margin:4px 0 10px;"><a href="./index.html" style="color:#f0d59e;text-decoration:none;border:1px solid rgba(202,163,90,.4);padding:6px 10px;border-radius:999px;display:inline-block;">← Back to Dashboard</a></p>
   <p style="margin:0 0 12px;"><a href="./calculator.html" style="color:#e6f0ff;text-decoration:none;border:1px solid rgba(125,211,252,.5);padding:8px 12px;border-radius:10px;display:inline-block;background:rgba(125,211,252,.12);">Use integrated Worksheet + Calculator (live sync)</a></p>
 
+  <section class="sheet">
+    <div class="ribbon"></div>
+    <h2>Auto-Filled Deal Snapshot (from Calculator)</h2>
+    <p class="small">Values pull from your most recent calculator entry.</p>
+    <table>
+      <tr><th>Property Address</th><td id="afAddress">—</td><th>ZIP</th><td id="afZip">—</td></tr>
+      <tr><th>Sqft</th><td id="afSqft">—</td><th>Purchase</th><td id="afPurchase">—</td></tr>
+      <tr><th>ARV</th><td id="afArv">—</td><th>Est. Rehab</th><td id="afRehab">—</td></tr>
+      <tr><th>Hold (months)</th><td id="afHoldMonths">—</td><th>Interest Rate</th><td id="afInterest">—</td></tr>
+      <tr><th>Contingency</th><td id="afContingency">—</td><th>Projected Profit</th><td id="afProfit">—</td></tr>
+      <tr><th>Total Project Cost</th><td id="afTotalCost">—</td><th>70% Max Offer</th><td id="afMaxOffer">—</td></tr>
+    </table>
+    <p class="small">Last synced: <span id="afUpdated">—</span></p>
+  </section>
+
   <section class="sheet cover">
     <span class="kicker">Premium Investor Toolkit</span>
     <h1>House Flipping Worksheet Pack</h1>
@@ -309,5 +324,40 @@
   </section>
 
 </div>
+<script>
+(function(){
+  const fmtMoney = (v) => {
+    const n = Number(v);
+    if (Number.isNaN(n)) return v || '—';
+    return n.toLocaleString('en-US',{style:'currency',currency:'USD',minimumFractionDigits:2,maximumFractionDigits:2});
+  };
+  const fill = (id, val) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = (val ?? '') === '' ? '—' : val;
+  };
+
+  try {
+    const raw = localStorage.getItem('jdhome_last_deal');
+    if (!raw) return;
+    const d = JSON.parse(raw);
+
+    fill('afAddress', d.address || '—');
+    fill('afZip', d.zip || '—');
+    fill('afSqft', d.sqft ? Number(d.sqft).toLocaleString() : '—');
+    fill('afPurchase', d.purchase ? fmtMoney(d.purchase) : '—');
+    fill('afArv', d.arv ? fmtMoney(d.arv) : '—');
+    fill('afRehab', d.rehab ? fmtMoney(d.rehab) : '—');
+    fill('afHoldMonths', d.holdMonths ? `${d.holdMonths} months` : '—');
+    fill('afInterest', d.interestPct ? `${Number(d.interestPct).toFixed(2)}%` : '—');
+    fill('afContingency', d.contingencyPct ? `${Number(d.contingencyPct).toFixed(2)}%` : '—');
+    fill('afProfit', d.profit || '—');
+    fill('afTotalCost', d.totalCost || '—');
+    fill('afMaxOffer', d.maxOffer || '—');
+    fill('afUpdated', d.generatedAt ? new Date(d.generatedAt).toLocaleString() : '—');
+  } catch(e) {
+    console.warn('Auto-fill load failed', e);
+  }
+})();
+</script>
 </body>
 </html>

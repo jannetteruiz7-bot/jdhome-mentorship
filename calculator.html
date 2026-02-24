@@ -366,6 +366,25 @@ function syncCalculatorToWorksheet(){
   syncingWorksheet = false;
 }
 
+function persistWorksheetData(){
+  const payload = {
+    address: $('wsAddress')?.value || '',
+    zip: $('wsZip')?.value || '',
+    sqft: $('sqft')?.value || $('wsSqft')?.value || '',
+    purchase: $('purchase')?.value || '',
+    arv: $('arv')?.value || '',
+    rehab: $('rehabFlat')?.value || '',
+    holdMonths: $('holdMonths')?.value || '',
+    interestPct: $('interestPct')?.value || '',
+    contingencyPct: $('contingencyPct')?.value || '',
+    profit: $('oProfit')?.textContent || '',
+    totalCost: $('oTotal')?.textContent || '',
+    maxOffer: $('kMaxOffer')?.textContent || '',
+    generatedAt: new Date().toISOString()
+  };
+  localStorage.setItem('jdhome_last_deal', JSON.stringify(payload));
+}
+
 function applyPreset(name){
   const p = AREA_PRESETS[name] || AREA_PRESETS.default;
   $('sellAgentPct').value = p.agentPct;
@@ -583,6 +602,7 @@ function calc(){
   box.innerHTML = html;
 
   syncCalculatorToWorksheet();
+  persistWorksheetData();
 
   // stash for copy/csv
   window.__deal = {
@@ -738,8 +758,8 @@ function exportPdf(){
   const num = (id) => Number($(id)?.value || 0);
   const txt = (id) => ($(id)?.value ?? '').toString().trim();
 
-  const address = txt('wsAddress') || '—';
-  const zip = txt('wsZip') || '—';
+  const address = txt('wsAddress') || 'ï¿½';
+  const zip = txt('wsZip') || 'ï¿½';
   const sqft = num('sqft') || num('wsSqft') || 0;
 
   const html = `<!doctype html>
@@ -764,7 +784,7 @@ function exportPdf(){
   <h3>Property Snapshot</h3>
   <table>
     <tr><th>Address</th><td>${address}</td><th>ZIP</th><td>${zip}</td></tr>
-    <tr><th>Sqft</th><td>${sqft ? sqft.toLocaleString() : '—'}</td><th>Preset</th><td>${$('preset').value}</td></tr>
+    <tr><th>Sqft</th><td>${sqft ? sqft.toLocaleString() : 'ï¿½'}</td><th>Preset</th><td>${$('preset').value}</td></tr>
   </table>
 
   <h3>Main Deal Numbers</h3>
