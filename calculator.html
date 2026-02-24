@@ -158,7 +158,6 @@
       <a class="btnlink" href="./index.html">← Back to Dashboard</a>
       <button id="loadSample">Load Sample Deal</button>
       <button class="alt" id="resetDefaults">Reset to Defaults</button>
-      <button class="alt" id="copySummary">Copy Inputs + Results</button>
       <button class="alt" id="exportPdf">Export PDF Sheet</button>
     </div>
   </section>
@@ -675,13 +674,6 @@ function loadSample(){
   calc();
 }
 
-function copySummary(){
-  calc();
-  const d = window.__deal || {};
-  const text = `Flip Deal Summary\nPurchase: ${cur(d.purchase)}\nARV: ${cur(d.arv)}\nTotal Cost: ${cur(d.totalCost)}\nNet Profit: ${cur(d.netProfit)}\nProfit Margin: ${pct(d.marginPct)}\nCash Invested: ${cur(d.cashInvested)}\n${d.cocLabel}: ${pct(d.cocPct)}\n70% Max Offer: ${cur(d.maxOffer70)}\nHM Loanable: ${cur(d.hmLoanable)}\nHM Borrower Contribution: ${cur(d.hmBorrowerContribution)}\nHM Cash-to-Close: ${cur(d.hmCashToClose)}`;
-  navigator.clipboard.writeText(text).then(()=>alert('Summary copied to clipboard.'));
-}
-
 function exportPdf(){
   calc();
 
@@ -724,6 +716,8 @@ function exportPdf(){
     <div class="kpi"><div class="k">Cash-on-Cash Return</div><div class="v">${$('kCoc').textContent}</div></div>
   </div>
   ${collectSectionRows('Worksheet Inputs', ['wsAddress','wsZip','wsSqft','wsArv','wsPurchase'])}
+  ${collectSectionRows('Printable Worksheet Values', ['purchase','arv','sqft','rehabFlat','holdMonths','interestPct','contingencyPct'])}
+  <section><h3>Worksheet Profit Output</h3><table><tr><th>Field</th><th>Value</th></tr><tr><td>Projected Profit</td><td>${$('oProfit').textContent}</td></tr></table></section>
   ${collectSectionRows('Core Inputs', ['purchase','arv','rehabMode','rehabFlat','sqft','rehabPerSqft','holdMonths','holdMode','holdBase','monthlyHold','cashPurchase','useHardMoney75','downPct','interestPct','pointsPct','sellAgentPct','sellClosePct','contingencyPct'])}
   ${collectSectionRows('Advanced Inputs', ['acqFees','buyerCloseFees','lenderFlatFees','vacMarketing','repairContFlat','holdOverride','holdOverrideOn','sellOverride','sellOverrideOn'])}
   ${collectSectionRows('Hard Money Inputs', ['hmPointsPct','hmDailyInterestDays','hmCreditReportFee','hmFloodCertFee','hmProcessingFee','hmCourierFee','hmWireFee','hmRecordingFee','hmDocPrepFee','hmTaxServiceFee','hmTaxCertFee','hmAssignLeaseFee','hmMudRecordingFee','hmTitlePct'])}
@@ -744,7 +738,6 @@ $('restoreSell').addEventListener('click',()=>{ $('sellOverrideOn').checked=fals
 $('preset').addEventListener('change',e=>{ applyPreset(e.target.value); calc(); });
 $('resetDefaults').addEventListener('click', resetDefaults);
 $('loadSample').addEventListener('click', loadSample);
-$('copySummary').addEventListener('click', copySummary);
 $('exportPdf').addEventListener('click', exportPdf);
 ids.forEach(id => $(id).addEventListener('input', calc));
 Object.keys(WS_TO_CALC_MAP).forEach(id => $(id).addEventListener('input', syncWorksheetToCalculator));
@@ -754,6 +747,7 @@ resetDefaults();
 </script>
 </body>
 </html>
+
 
 
 
